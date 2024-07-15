@@ -6,11 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+
 import com.sharonsalman.fittrack.databinding.FragmentFitnessLevelBinding;
 
 public class FitnessLevelFragment extends Fragment {
@@ -24,19 +26,30 @@ public class FitnessLevelFragment extends Fragment {
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
         // Set up the Spinner
-        Spinner ageSpinner = binding.fitnesslevelSpinner;
+        Spinner fitnesslevelSpinner = binding.fitnesslevelSpinner;
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(requireContext(),
                 R.array.fitness_level, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        ageSpinner.setAdapter(adapter);
+        fitnesslevelSpinner.setAdapter(adapter);
 
-        // Handle button click
+        // Handle button clicks
         binding.nextButton.setOnClickListener(v -> {
-            String selectedAgeRange = (String) ageSpinner.getSelectedItem();
-            sharedViewModel.setAge(Integer.parseInt(selectedAgeRange.split("-")[0])); // Example: Setting the lower bound as age
-            Navigation.findNavController(v).navigate(R.id.action_fiFragment_to_workoutFrequencyFragment);
+            String selectedFitnessLevel = (String) fitnesslevelSpinner.getSelectedItem();
+            sharedViewModel.setFitnessLevel(selectedFitnessLevel);
+            Navigation.findNavController(v).navigate(R.id.action_fitnessLevelFragment_to_workoutlocationFragment);
+
+        });
+
+        binding.prevButton.setOnClickListener(v -> {
+            Navigation.findNavController(v).navigate(R.id.action_FitnessLevelFragment_to_workoutFrequencyFragment);
         });
 
         return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null; // Clean up the binding
     }
 }

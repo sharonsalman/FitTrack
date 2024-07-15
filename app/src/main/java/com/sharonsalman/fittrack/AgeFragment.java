@@ -23,18 +23,19 @@ public class AgeFragment extends Fragment {
         binding = FragmentAgeBinding.inflate(inflater, container, false);
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
-        // Set up the Spinner
         Spinner ageSpinner = binding.ageSpinner;
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(requireContext(),
                 R.array.age_ranges, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ageSpinner.setAdapter(adapter);
 
-        // Handle button click
         binding.nextButton.setOnClickListener(v -> {
             String selectedAgeRange = (String) ageSpinner.getSelectedItem();
-            sharedViewModel.setAge(Integer.parseInt(selectedAgeRange.split("-")[0])); // Example: Setting the lower bound as age
+            sharedViewModel.setAge(Integer.parseInt(selectedAgeRange.split("-")[0]));
             Navigation.findNavController(v).navigate(R.id.action_ageFragment_to_workoutFrequencyFragment);
+        });
+        binding.prevButton.setOnClickListener(v -> {
+            Navigation.findNavController(v).navigate(R.id.action_ageFragment_to_nameFragment);
         });
 
         return binding.getRoot();
