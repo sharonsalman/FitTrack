@@ -29,6 +29,10 @@ public class NameFragment extends Fragment {
             sharedViewModel.setEmail(binding.nameEditText.getText().toString());
             Navigation.findNavController(v).navigate(R.id.action_nameFragment_to_ageFragment);
         });
+        binding.prevButton.setOnClickListener(v -> {
+            sharedViewModel.setEmail(binding.nameEditText.getText().toString());
+            Navigation.findNavController(v).navigate(R.id.action_nameFragment_to_emailFragment);
+        });
 
         return binding.getRoot();
     }

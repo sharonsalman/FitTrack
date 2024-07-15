@@ -38,6 +38,6 @@
     <action
         android:id="@+id/action_ageFragment_to_workoutFrequencyFragment"
         app:destination="@id/workoutFrequencyFragment"/>
-
+    </fragment>
 
 </navigation>
