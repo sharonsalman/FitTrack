@@ -72,19 +72,19 @@
             android:id="@+id/action_workoutlocationFragment_to_FitnessLevelFragment"
             app:destination="@id/FitnessLevelFragment" />
         <action
-            android:id="@+id/action_workoutlocationFragment_to_goalsFragment"
+            android:id="@+id/action_workoutlocationFragment_to_goalFragment"
             app:destination="@id/goalsFragment" />
     </fragment>
     <fragment
-        android:id="@+id/goalsFragment"
-        android:name="com.sharonsalman.fittrack.GoalsFragment"
+        android:id="@+id/goalFragment"
+        android:name="com.sharonsalman.fittrack.GoalFragment"
         android:label="Name Fragment"
         tools:layout="@layout/fragment_name" >
         <action
-            android:id="@+id/action_goalsFragment_to_workoutlocationFragment"
+            android:id="@+id/action_goalFragment_to_workoutlocationFragment"
             app:destination="@id/workoutlocationFragment" />
         <action
-            android:id="@+id/action_goalsFragment_to_currentweightFragment"
+            android:id="@+id/action_goalFragment_to_currentweightFragment"
             app:destination="@id/currentweightFragment" />
     </fragment>
     <fragment

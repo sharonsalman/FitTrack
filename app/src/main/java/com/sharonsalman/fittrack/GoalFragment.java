@@ -13,16 +13,16 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
-import com.sharonsalman.fittrack.databinding.FragmentGoalsBinding;
+import com.sharonsalman.fittrack.databinding.FragmentGoalBinding;
 
 public class GoalFragment extends Fragment {
-    private FragmentGoalsBinding binding;
+    private FragmentGoalBinding binding;
     private SharedViewModel sharedViewModel;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentGoalsBinding.inflate(inflater, container, false);
+        binding = FragmentGoalBinding.inflate(inflater, container, false);
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
         // Set up the Spinner for goals
@@ -36,10 +36,10 @@ public class GoalFragment extends Fragment {
         binding.nextButton.setOnClickListener(v -> {
             String selectedGoal = (String) goalsSpinner.getSelectedItem();
             sharedViewModel.setGoals(selectedGoal);
-            Navigation.findNavController(v).navigate(R.id.action_goalsFragment_to_currentweightFragment);
+            Navigation.findNavController(v).navigate(R.id.action_goalFragment_to_currentweightFragment);
         });
         binding.prevButton.setOnClickListener(v -> {
-            Navigation.findNavController(v).navigate(R.id.action_goalsFragment_to_workoutlocationFragment);
+            Navigation.findNavController(v).navigate(R.id.action_goalFragment_to_workoutlocationFragment);
         });
 
         return binding.getRoot();
