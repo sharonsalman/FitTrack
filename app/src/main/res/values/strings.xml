@@ -158,5 +158,10 @@
         <item>149</item>
         <item>150</item>
     </string-array>
+    <string-array name="workout_frequency">
+        <item> 1-2 times a week</item>
+        <item> 2-3 times a week</item>
+        <item> 4-5 times a week</item>
+    </string-array>
 </resources>
 

@@ -40,7 +40,7 @@ public class CurrentWeightFragment extends Fragment {
         });
 
         binding.prevButton.setOnClickListener(v -> {
-            Navigation.findNavController(v).navigate(R.id.action_currentweightFragment_to_goalsFragment);
+            Navigation.findNavController(v).navigate(R.id.action_currentweightFragment_to_goalFragment);
         });
 
         return binding.getRoot();

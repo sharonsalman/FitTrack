@@ -34,10 +34,10 @@ public class WorkoutLocationFragment extends Fragment {
         binding.nextButton.setOnClickListener(v -> {
             String selectedWorkoutLocation = (String) workoutlocationSpinner.getSelectedItem();
             sharedViewModel.setAge(Integer.parseInt(selectedWorkoutLocation.split("-")[0]));
-            Navigation.findNavController(v).navigate(R.id.action_fitnessLevelFragment_to_workoutlocationFragment);
+            Navigation.findNavController(v).navigate(R.id.action_workoutlocationFragment_to_goalFragment);
         });
         binding.prevButton.setOnClickListener(v -> {
-            Navigation.findNavController(v).navigate(R.id.action_FitnessLevelFragment_to_workoutFrequencyFragment);
+            Navigation.findNavController(v).navigate(R.id.action_workoutlocationFragment_to_FitnessLevelFragment);
         });
 
         return binding.getRoot();

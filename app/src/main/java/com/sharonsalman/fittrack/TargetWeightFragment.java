@@ -36,7 +36,7 @@ public class TargetWeightFragment extends Fragment {
         binding.nextButton.setOnClickListener(v -> {
             String selectedtargetWeight = (String) targetWeightSpinner.getSelectedItem();
             sharedViewModel.setCurrentWeight(Float.parseFloat(selectedtargetWeight));
-            Navigation.findNavController(v).navigate(R.id.action_ta);
+            Navigation.findNavController(v).navigate(R.id.action_targetweightFragment_to_mainActivity);
         });
 
         binding.prevButton.setOnClickListener(v -> {

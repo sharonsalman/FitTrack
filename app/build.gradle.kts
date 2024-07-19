@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
+    implementation(libs.fragment)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -58,6 +59,11 @@ dependencies {
     implementation(libs.material3)
     implementation (libs.material.icons.extended)
     implementation (libs.lifecycle.viewmodel.ktx.v283)
+    implementation (libs.play.services.location)
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
+
+
 
 
 }
