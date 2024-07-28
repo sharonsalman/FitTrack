@@ -1,4 +1,4 @@
-package com.sharonsalman.fittrack;
+package com.sharonsalman.fittrack.registerFragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,33 +11,36 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
-import com.sharonsalman.fittrack.databinding.FragmentWorkoutLocationBinding;
 
-public class WorkoutLocationFragment extends Fragment {
-    private FragmentWorkoutLocationBinding binding;
+import com.sharonsalman.fittrack.R;
+import com.sharonsalman.fittrack.SharedViewModel;
+import com.sharonsalman.fittrack.databinding.FragmentWorkoutFrequencyBinding;
+
+public class workout_frequency_fragment extends Fragment {
+    private FragmentWorkoutFrequencyBinding binding;
     private SharedViewModel sharedViewModel;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentWorkoutLocationBinding.inflate(inflater, container, false);
+        binding = FragmentWorkoutFrequencyBinding.inflate(inflater, container, false);
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
-        // Set up the Spinner
-        Spinner workoutlocationSpinner = binding.workoutlocationSpinner;
+
+        Spinner workoutfrequencySpinner = binding.workoutfrequencySpinner;
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(requireContext(),
-                R.array.workout_location, android.R.layout.simple_spinner_item);
+                R.array.workout_frequency, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        workoutlocationSpinner.setAdapter(adapter);
+        workoutfrequencySpinner.setAdapter(adapter);
 
         // Handle button click
         binding.nextButton.setOnClickListener(v -> {
-            String selectedWorkoutLocation = (String) workoutlocationSpinner.getSelectedItem();
-            sharedViewModel.setAge(Integer.parseInt(selectedWorkoutLocation.split("-")[0]));
-            Navigation.findNavController(v).navigate(R.id.action_workoutlocationFragment_to_goalFragment);
+            String selectedWorkoufrequency = (String) workoutfrequencySpinner.getSelectedItem();
+            sharedViewModel.setAge(Integer.parseInt(selectedWorkoufrequency.split("-")[0]));
+            Navigation.findNavController(v).navigate(R.id.action_workoutFrequencyFragment_to_fitnessLevelFragment);
         });
         binding.prevButton.setOnClickListener(v -> {
-            Navigation.findNavController(v).navigate(R.id.action_workoutlocationFragment_to_FitnessLevelFragment);
+            Navigation.findNavController(v).navigate(R.id.action_workoutFrequencyFragment_to_ageFragment);
         });
 
         return binding.getRoot();

@@ -1,4 +1,4 @@
-package com.sharonsalman.fittrack;
+package com.sharonsalman.fittrack.registerFragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,9 +9,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+
+import com.sharonsalman.fittrack.R;
+import com.sharonsalman.fittrack.SharedViewModel;
 import com.sharonsalman.fittrack.databinding.FragmentEmailBinding;
 
-public class EmailFragment extends Fragment {
+public class email_fragment extends Fragment {
     private FragmentEmailBinding binding;
     private SharedViewModel sharedViewModel;
 

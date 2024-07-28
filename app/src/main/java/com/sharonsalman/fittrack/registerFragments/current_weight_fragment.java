@@ -1,4 +1,4 @@
-package com.sharonsalman.fittrack;
+package com.sharonsalman.fittrack.registerFragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,9 +13,11 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import com.sharonsalman.fittrack.R;
+import com.sharonsalman.fittrack.SharedViewModel;
 import com.sharonsalman.fittrack.databinding.FragmentCurrentWeightBinding;
 
-public class CurrentWeightFragment extends Fragment {
+public class current_weight_fragment extends Fragment {
     private FragmentCurrentWeightBinding binding;
     private SharedViewModel sharedViewModel;
 

@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
-        tools:context=".EmailFragment">
+        tools:context=".registerFragments.email_fragment">
 
         <TextView
             android:layout_width="match_parent"

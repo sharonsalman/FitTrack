@@ -1,4 +1,4 @@
-package com.sharonsalman.fittrack;
+package com.sharonsalman.fittrack.registerFragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,9 +13,11 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import com.sharonsalman.fittrack.R;
+import com.sharonsalman.fittrack.SharedViewModel;
 import com.sharonsalman.fittrack.databinding.FragmentGoalBinding;
 
-public class GoalFragment extends Fragment {
+public class goal_fragment extends Fragment {
     private FragmentGoalBinding binding;
     private SharedViewModel sharedViewModel;
 
