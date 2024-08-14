@@ -107,6 +107,9 @@
         <action
             android:id="@+id/action_targetweightFragment_to_currentweightFragment"
             app:destination="@id/currentweightFragment" />
+        <action
+            android:id="@+id/action_targetweightFragment_to_main_screen_fragment"
+            app:destination="@id/main_screen_fragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -116,6 +119,14 @@
         <action
             android:id="@+id/action_loginFragment_to_emailFragment"
             app:destination="@id/emailFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_main_screen_fragment"
+            app:destination="@id/main_screen_fragment" />
     </fragment>
+    <fragment
+        android:id="@+id/main_screen_fragment"
+        android:name="com.sharonsalman.fittrack.main_screen_fragment"
+        android:label="main_screen_fragment"
+        tools:layout="@layout/main_screen_fragment" />
 
 </navigation>

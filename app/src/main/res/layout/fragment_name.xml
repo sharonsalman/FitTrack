@@ -1,8 +1,5 @@
-<!-- res/layout/fragment_email.xml -->
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable
             name="sharedViewModel"
@@ -12,27 +9,27 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:gravity="center"
-        tools:context=".registerFragments.name_fragment">
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <EditText
             android:id="@+id/nameEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter your name"
-            android:text="@={sharedViewModel.email}" />
+            android:hint="Name"
+            android:text="@={sharedViewModel.name}" />
 
         <Button
             android:id="@+id/nextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Next" />
+
         <Button
             android:id="@+id/prevButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Previous" />
-
     </LinearLayout>
 </layout>

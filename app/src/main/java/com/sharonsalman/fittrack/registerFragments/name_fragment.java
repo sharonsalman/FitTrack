@@ -1,4 +1,3 @@
-// EmailFragment.java
 package com.sharonsalman.fittrack.registerFragments;
 
 import android.os.Bundle;
@@ -29,7 +28,7 @@ public class name_fragment extends Fragment {
         binding.setLifecycleOwner(getViewLifecycleOwner());
 
         binding.nextButton.setOnClickListener(v -> {
-            sharedViewModel.setEmail(binding.nameEditText.getText().toString());
+            sharedViewModel.setName(binding.nameEditText.getText().toString());
             Navigation.findNavController(v).navigate(R.id.action_nameFragment_to_ageFragment);
         });
         binding.prevButton.setOnClickListener(v -> {

@@ -33,12 +33,13 @@ public class workout_location_fragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         workoutlocationSpinner.setAdapter(adapter);
 
-        // Handle button click
+        //Buttons
         binding.nextButton.setOnClickListener(v -> {
             String selectedWorkoutLocation = (String) workoutlocationSpinner.getSelectedItem();
-            sharedViewModel.setAge(Integer.parseInt(selectedWorkoutLocation.split("-")[0]));
+            sharedViewModel.setWorkoutLocation(selectedWorkoutLocation);
             Navigation.findNavController(v).navigate(R.id.action_workoutlocationFragment_to_goalFragment);
         });
+
         binding.prevButton.setOnClickListener(v -> {
             Navigation.findNavController(v).navigate(R.id.action_workoutlocationFragment_to_FitnessLevelFragment);
         });

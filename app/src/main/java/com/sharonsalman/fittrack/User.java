@@ -2,6 +2,7 @@ package com.sharonsalman.fittrack;
 
 public class User {
     private String email;
+    private String password;
     private String name;
     private int age;
     private String workoutFrequency;
@@ -11,11 +12,15 @@ public class User {
     private float currentWeight;
     private float targetWeight;
 
-    // Constructor
-    public User(String email, String name, int age, String workoutFrequency, String fitnessLevel,
+    // Empty constructor needed for Firebase
+    public User() {}
+
+    // Constructor with parameters
+    public User(String email, String name,String password, int age, String workoutFrequency, String fitnessLevel,
                 String workoutLocation, String goal, float currentWeight, float targetWeight) {
         this.email = email;
         this.name = name;
+        this.password = password;
         this.age = age;
         this.workoutFrequency = workoutFrequency;
         this.fitnessLevel = fitnessLevel;
@@ -41,6 +46,10 @@ public class User {
     public void setName(String name) {
         this.name = name;
     }
+
+    public void setPassword(String password){ this.password = password;}
+
+    public String getPassword() { return password; }
 
     public int getAge() {
         return age;

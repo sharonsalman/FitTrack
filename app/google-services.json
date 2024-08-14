@@ -21,7 +21,8 @@
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": []
-        }
+        },
+        "database_url": "https://fittrack-70436-default-rtdb.europe-west1.firebasedatabase.app"
       }
     }
   ],

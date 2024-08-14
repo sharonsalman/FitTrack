@@ -1,12 +1,14 @@
 package com.sharonsalman.fittrack;
 
 import android.os.Bundle;
-import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
+import androidx.appcompat.widget.Toolbar;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.FirebaseDatabase;
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -14,34 +16,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
-        Call<User> call = apiService.getUser("john_doe");
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if (response.isSuccessful()) {
-                    User user = response.body();
-                    if (user != null) {
-                        Log.d("MainActivity", "User Email: " + user.getEmail());
-                        Log.d("MainActivity", "User Name: " + user.getName());
-                        Log.d("MainActivity", "User Age: " + user.getAge());
-                        Log.d("MainActivity", "User Workout Frequency: " + user.getWorkoutFrequency());
-                        Log.d("MainActivity", "User Fitness Level: " + user.getFitnessLevel());
-                        Log.d("MainActivity", "User Workout Location: " + user.getWorkoutLocation());
-                        Log.d("MainActivity", "User Goal: " + user.getGoal());
-                        Log.d("MainActivity", "User Current Weight: " + user.getCurrentWeight());
-                        Log.d("MainActivity", "User Target Weight: " + user.getTargetWeight());
-                    }
-                } else {
-                    Log.e("MainActivity", "Request failed");
-                }
-            }
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Log.e("MainActivity", "Network request failed", t);
-            }
-        });
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
+
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        return NavigationUI.navigateUp(navController, new AppBarConfiguration.Builder(navController.getGraph()).build())
+                || super.onSupportNavigateUp();
     }
 }
