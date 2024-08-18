@@ -68,6 +68,8 @@ dependencies {
     implementation (libs.firebase.bom)
     implementation (libs.google.firebase.database)
     implementation(libs.recyclerview.v130)
+    implementation (libs.glide)
+    annotationProcessor (libs.glide.compiler)
 
 
 
