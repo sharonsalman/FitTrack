@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "631533007229",
+    "firebase_url": "https://fittrack-70436-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "fittrack-70436",
     "storage_bucket": "fittrack-70436.appspot.com"
   },
@@ -21,8 +22,7 @@
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": []
-        },
-        "database_url": "https://fittrack-70436-default-rtdb.europe-west1.firebasedatabase.app"
+        }
       }
     }
   ],

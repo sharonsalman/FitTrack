@@ -14,6 +14,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SharedViewModel extends AndroidViewModel {
@@ -53,7 +54,7 @@ public class SharedViewModel extends AndroidViewModel {
     private void loadPreferences() {
         email.setValue(sharedPreferences.getString(EMAIL_KEY, ""));
         name.setValue(sharedPreferences.getString(NAME_KEY, ""));
-        password.setValue(sharedPreferences.getString(PASSWORD_KEY, "")); // Fixed this line
+        password.setValue(sharedPreferences.getString(PASSWORD_KEY, ""));
         age.setValue(sharedPreferences.getInt(AGE_KEY, 0));
         workoutFrequency.setValue(sharedPreferences.getInt(WORKOUT_FREQUENCY_KEY, 0));
         fitnessLevel.setValue(sharedPreferences.getString(FITNESS_LEVEL_KEY, ""));
@@ -62,7 +63,6 @@ public class SharedViewModel extends AndroidViewModel {
         currentWeight.setValue(sharedPreferences.getFloat(CURRENT_WEIGHT_KEY, 0f));
         targetWeight.setValue(sharedPreferences.getFloat(TARGET_WEIGHT_KEY, 0f));
     }
-
 
     private void savePreference(String key, String value) {
         if (sharedPreferences != null) {
@@ -115,8 +115,8 @@ public class SharedViewModel extends AndroidViewModel {
         savePreference(NAME_KEY, name);
     }
 
-    public MutableLiveData<String> getPassword(){ return password; }
-    public void setPassword(String password){
+    public MutableLiveData<String> getPassword() { return password; }
+    public void setPassword(String password) {
         this.password.setValue(password);
         savePreference(PASSWORD_KEY, password);
     }
@@ -188,42 +188,88 @@ public class SharedViewModel extends AndroidViewModel {
     }
 
     public void saveDataToFirebase(OnSaveCompleteListener listener) {
-        Log.d("SharedViewModel", "Starting saveDataToFirebase");
-        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-            Log.e("SharedViewModel", "User not authenticated");
-            listener.onSaveComplete(false, "User not authenticated");
+        String emailValue = email.getValue();
+        String nameValue = name.getValue();
+        Integer ageValue = age.getValue();
+        Integer workoutFrequencyValue = workoutFrequency.getValue();
+        String fitnessLevelValue = fitnessLevel.getValue();
+        String workoutLocationValue = workoutLocation.getValue();
+        String goalsValue = goals.getValue();
+        Float currentWeightValue = currentWeight.getValue();
+        Float targetWeightValue = targetWeight.getValue();
+
+        if (emailValue == null || nameValue == null || ageValue == null || workoutFrequencyValue == null ||
+                fitnessLevelValue == null || workoutLocationValue == null || goalsValue == null ||
+                currentWeightValue == null || targetWeightValue == null) {
+            listener.onSaveComplete(false, "Data is incomplete");
             return;
         }
-        saveDataToFirebaseInternal(listener);
+
+        Map<String, Object> userMap = new HashMap<>();
+        userMap.put("name", nameValue);
+        userMap.put("age", ageValue);
+        userMap.put("workoutFrequency", workoutFrequencyValue);
+        userMap.put("fitnessLevel", fitnessLevelValue);
+        userMap.put("workoutLocation", workoutLocationValue);
+        userMap.put("goals", goalsValue);
+        userMap.put("currentWeight", currentWeightValue);
+        userMap.put("targetWeight", targetWeightValue);
+
+        DatabaseReference userRef = database.getReference("users").child(emailValue);
+        userRef.setValue(userMap)
+                .addOnSuccessListener(aVoid -> listener.onSaveComplete(true, "Data saved successfully"))
+                .addOnFailureListener(e -> listener.onSaveComplete(false, "Error saving data: " + e.getMessage()));
     }
 
-    private void saveDataToFirebaseInternal(OnSaveCompleteListener listener) {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference userRef = database.getReference("users").child(userId);
-
-        Map<String, Object> userData = new HashMap<>();
-        userData.put("email", email.getValue());
-        userData.put("name", name.getValue());
-        userData.put("age", age.getValue());
-        userData.put("workoutFrequency", workoutFrequency.getValue());
-        userData.put("fitnessLevel", fitnessLevel.getValue());
-        userData.put("workoutLocation", workoutLocation.getValue());
-        userData.put("goals", goals.getValue());
-        userData.put("currentWeight", currentWeight.getValue());
-        userData.put("targetWeight", targetWeight.getValue());
-
-        Log.d("SharedViewModel", "Attempting to save data to Firebase for user: " + userId);
-        userRef.setValue(userData)
-                .addOnSuccessListener(aVoid -> {
-                    Log.d("SharedViewModel", "Data saved successfully for user: " + userId);
-                    listener.onSaveComplete(true, "Data saved successfully");
-                })
-                .addOnFailureListener(e -> {
-                    Log.e("SharedViewModel", "Error saving data for user: " + userId, e);
-                    listener.onSaveComplete(false, "Error saving data: " + e.getMessage());
-                });
-    }
     public interface OnSaveCompleteListener {
         void onSaveComplete(boolean success, String message);
+    }
+
+    // Fitness Program and Exercise Methods
+
+    public void fetchPrograms(OnFetchCompleteListener listener) {
+        DatabaseReference programsRef = database.getReference("programs");
+
+        programsRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Map<String, FitnessProgram> programs = (Map<String, FitnessProgram>) task.getResult().getValue();
+                listener.onFetchComplete(true, programs);
+            } else {
+                listener.onFetchComplete(false, "Failed to fetch programs: " + task.getException().getMessage());
+            }
+        });
+    }
+
+    public void fetchExercises(OnFetchCompleteListener listener) {
+        DatabaseReference exercisesRef = database.getReference("exercises");
+
+        exercisesRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Map<String, Exercise> exercises = (Map<String, Exercise>) task.getResult().getValue();
+                listener.onFetchComplete(true, exercises);
+            } else {
+                listener.onFetchComplete(false, "Failed to fetch exercises: " + task.getException().getMessage());
+            }
+        });
+    }
+
+    public void addProgram(String programId, FitnessProgram program, OnSaveCompleteListener listener) {
+        DatabaseReference programsRef = database.getReference("programs").child(programId);
+
+        programsRef.setValue(program)
+                .addOnSuccessListener(aVoid -> listener.onSaveComplete(true, "Program added successfully"))
+                .addOnFailureListener(e -> listener.onSaveComplete(false, "Error adding program: " + e.getMessage()));
+    }
+
+    public void addExercise(String exerciseId, Exercise exercise, OnSaveCompleteListener listener) {
+        DatabaseReference exercisesRef = database.getReference("exercises").child(exerciseId);
+
+        exercisesRef.setValue(exercise)
+                .addOnSuccessListener(aVoid -> listener.onSaveComplete(true, "Exercise added successfully"))
+                .addOnFailureListener(e -> listener.onSaveComplete(false, "Error adding exercise: " + e.getMessage()));
+    }
+
+    public interface OnFetchCompleteListener {
+        void onFetchComplete(boolean success, Object data);
     }
 }

@@ -5,6 +5,21 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/loginFragment">
 
+    <!-- Login Fragment -->
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.sharonsalman.fittrack.login_fragment"
+        android:label="LoginFragment"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_emailFragment"
+            app:destination="@id/emailFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_main_screen_fragment"
+            app:destination="@id/main_screen_fragment" />
+    </fragment>
+
+    <!-- Registration Fragments -->
     <fragment
         android:id="@+id/emailFragment"
         android:name="com.sharonsalman.fittrack.registerFragments.email_fragment"
@@ -19,7 +34,7 @@
         android:id="@+id/nameFragment"
         android:name="com.sharonsalman.fittrack.registerFragments.name_fragment"
         android:label="Name Fragment"
-        tools:layout="@layout/fragment_name" >
+        tools:layout="@layout/fragment_name">
         <action
             android:id="@+id/action_nameFragment_to_emailFragment"
             app:destination="@id/emailFragment"/>
@@ -27,11 +42,12 @@
             android:id="@+id/action_nameFragment_to_ageFragment"
             app:destination="@id/ageFragment"/>
     </fragment>
+
     <fragment
         android:id="@+id/ageFragment"
         android:name="com.sharonsalman.fittrack.registerFragments.age_fragment"
         android:label="Age Fragment"
-        tools:layout="@layout/fragment_age" >
+        tools:layout="@layout/fragment_age">
         <action
             android:id="@+id/action_ageFragment_to_nameFragment"
             app:destination="@id/nameFragment"/>
@@ -39,11 +55,12 @@
             android:id="@+id/action_ageFragment_to_workoutFrequencyFragment"
             app:destination="@id/workoutFrequencyFragment"/>
     </fragment>
+
     <fragment
         android:id="@+id/workoutFrequencyFragment"
         android:name="com.sharonsalman.fittrack.registerFragments.workout_frequency_fragment"
-        android:label="WorkoutFrequency Fragment"
-        tools:layout="@layout/fragment_workout_frequency" >
+        android:label="Workout Frequency Fragment"
+        tools:layout="@layout/fragment_workout_frequency">
         <action
             android:id="@+id/action_workoutFrequencyFragment_to_fitnessLevelFragment"
             app:destination="@id/FitnessLevelFragment"/>
@@ -51,82 +68,114 @@
             android:id="@+id/action_workoutFrequencyFragment_to_ageFragment"
             app:destination="@id/ageFragment"/>
     </fragment>
+
     <fragment
         android:id="@+id/FitnessLevelFragment"
         android:name="com.sharonsalman.fittrack.registerFragments.fitness_level_fragment"
         android:label="Fitness Level Fragment"
-        tools:layout="@layout/fragment_fitness_level" >
+        tools:layout="@layout/fragment_fitness_level">
         <action
             android:id="@+id/action_fitnessLevelFragment_to_workoutlocationFragment"
             app:destination="@id/workoutlocationFragment"/>
         <action
             android:id="@+id/action_FitnessLevelFragment_to_workoutFrequencyFragment"
-            app:destination="@id/workoutFrequencyFragment" />
+            app:destination="@id/workoutFrequencyFragment"/>
     </fragment>
+
     <fragment
         android:id="@+id/workoutlocationFragment"
         android:name="com.sharonsalman.fittrack.registerFragments.workout_location_fragment"
         android:label="Workout Location Fragment"
-        tools:layout="@layout/fragment_workout_location" >
+        tools:layout="@layout/fragment_workout_location">
         <action
             android:id="@+id/action_workoutlocationFragment_to_FitnessLevelFragment"
-            app:destination="@id/FitnessLevelFragment" />
+            app:destination="@id/FitnessLevelFragment"/>
         <action
             android:id="@+id/action_workoutlocationFragment_to_goalFragment"
-            app:destination="@id/goalFragment" />
+            app:destination="@id/goalFragment"/>
     </fragment>
+
     <fragment
         android:id="@+id/goalFragment"
         android:name="com.sharonsalman.fittrack.registerFragments.goal_fragment"
         android:label="Goal Fragment"
-        tools:layout="@layout/fragment_goal" >
+        tools:layout="@layout/fragment_goal">
         <action
             android:id="@+id/action_goalFragment_to_workoutlocationFragment"
-            app:destination="@id/workoutlocationFragment" />
+            app:destination="@id/workoutlocationFragment"/>
         <action
             android:id="@+id/action_goalFragment_to_currentweightFragment"
-            app:destination="@id/currentweightFragment" />
+            app:destination="@id/currentweightFragment"/>
     </fragment>
+
     <fragment
         android:id="@+id/currentweightFragment"
         android:name="com.sharonsalman.fittrack.registerFragments.current_weight_fragment"
         android:label="Current Weight Fragment"
-        tools:layout="@layout/fragment_current_weight" >
+        tools:layout="@layout/fragment_current_weight">
         <action
             android:id="@+id/action_currentweightFragment_to_goalFragment"
-            app:destination="@id/goalFragment" />
+            app:destination="@id/goalFragment"/>
         <action
             android:id="@+id/action_currentweightFragment_to_targetweightFragment"
-            app:destination="@id/targetweightFragment" />
+            app:destination="@id/targetweightFragment"/>
     </fragment>
+
     <fragment
         android:id="@+id/targetweightFragment"
         android:name="com.sharonsalman.fittrack.registerFragments.target_weight_fragment"
         android:label="Target Weight Fragment"
-        tools:layout="@layout/fragment_target_weight" >
+        tools:layout="@layout/fragment_target_weight">
         <action
             android:id="@+id/action_targetweightFragment_to_currentweightFragment"
-            app:destination="@id/currentweightFragment" />
+            app:destination="@id/currentweightFragment"/>
         <action
             android:id="@+id/action_targetweightFragment_to_main_screen_fragment"
-            app:destination="@id/main_screen_fragment" />
+            app:destination="@id/main_screen_fragment"/>
     </fragment>
-    <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.sharonsalman.fittrack.login_fragment"
-        android:label="LoginFragment"
-        tools:layout="@layout/fragment_login">
-        <action
-            android:id="@+id/action_loginFragment_to_emailFragment"
-            app:destination="@id/emailFragment" />
-        <action
-            android:id="@+id/action_loginFragment_to_main_screen_fragment"
-            app:destination="@id/main_screen_fragment" />
-    </fragment>
+
+    <!-- Main Screen Fragment -->
     <fragment
         android:id="@+id/main_screen_fragment"
         android:name="com.sharonsalman.fittrack.main_screen_fragment"
-        android:label="main_screen_fragment"
-        tools:layout="@layout/main_screen_fragment" />
+        android:label="Main Screen Fragment"
+        tools:layout="@layout/main_screen_fragment">
+        <action
+            android:id="@+id/action_mainScreenFragment_to_fitnessProgramsFragment"
+            app:destination="@id/fitnessProgramsFragment"/>
+        <action
+            android:id="@+id/action_mainScreenFragment_to_calendarFragment"
+            app:destination="@id/calendarFragment"/>
+        <action
+            android:id="@+id/action_mainScreenFragment_to_trackFragment"
+            app:destination="@id/trackFragment"/>
+        <action
+            android:id="@+id/action_mainScreenFragment_to_goalsFragment"
+            app:destination="@id/goalsFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/fitnessProgramsFragment"
+        android:name="com.sharonsalman.fittrack.FitnessProgramsFragment"
+        android:label="Fitness Programs"
+        tools:layout="@layout/fragment_fitness_programs" />
+
+    <fragment
+        android:id="@+id/calendarFragment"
+        android:name="com.sharonsalman.fittrack.CalendarFragment"
+        android:label="Calendar"
+        tools:layout="@layout/fragment_calendar" />
+
+    <fragment
+        android:id="@+id/trackFragment"
+        android:name="com.sharonsalman.fittrack.TrackFragment"
+        android:label="Track"
+        tools:layout="@layout/fragment_track" />
+
+    <fragment
+        android:id="@+id/goalsFragment"
+        android:name="com.sharonsalman.fittrack.GoalsFragment"
+        android:label="Goals"
+        tools:layout="@layout/fragment_goals" />
 
 </navigation>

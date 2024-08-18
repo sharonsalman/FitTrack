@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.navigation.ui)
     implementation(libs.fragment)
     implementation(libs.firebase.database)
+    implementation(libs.recyclerview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -66,6 +67,7 @@ dependencies {
     implementation (libs.firebase.auth.v2110)
     implementation (libs.firebase.bom)
     implementation (libs.google.firebase.database)
+    implementation(libs.recyclerview.v130)
 
 
 
