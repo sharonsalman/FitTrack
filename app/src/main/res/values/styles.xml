@@ -6,4 +6,5 @@
     <style name="CustomDateTextAppearance" parent="TextAppearance.AppCompat">
         <item name="android:textColor">#FFFFFF</item>
     </style>
+
 </resources>

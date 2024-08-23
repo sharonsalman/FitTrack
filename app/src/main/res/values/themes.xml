@@ -1,11 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- Base application theme with background image -->
     <style name="Base.Theme.FitTrack" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:windowBackground">@drawable/background</item> <!-- Set your background image here -->
     </style>
-    <!-- Base application theme -->
-    <style name="Theme.FitTrack" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+
+    <!-- Application theme inheriting from the base theme -->
+    <style name="Theme.FitTrack" parent="Base.Theme.FitTrack">
         <!-- Primary color -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
@@ -16,8 +16,7 @@
         <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
         <item name="colorOnSecondary">@color/colorOnSecondary</item>
 
-        <!-- Background color -->
-        <item name="android:windowBackground">@color/backgroundColor</item>
+        <!-- Background color (this will be overridden by the image) -->
         <item name="colorOnBackground">@color/colorOnBackground</item>
 
         <!-- Surface color -->
