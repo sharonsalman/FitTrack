@@ -3,5 +3,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#A9A9A9</color>
-    <color name="colorPrimary">#8692F7</color>
+    <color name="colorPrimary">#6a8af8</color>
+    <color name="colorPrimaryVariant">#4a6ab0</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+    <color name="colorSecondary">#FF4081</color>
+    <color name="colorSecondaryVariant">#F50057</color>
+    <color name="colorOnSecondary">#FFFFFF</color>
+    <color name="backgroundColor">#F0F0F0</color>
+    <color name="colorOnBackground">#000000</color>
 </resources>

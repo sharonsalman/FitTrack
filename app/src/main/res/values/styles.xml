@@ -1,7 +1,9 @@
-<!-- res/values/styles.xml -->
 <resources>
-    <style name="CustomDateTextAppearance">
-        <item name="android:textColor">#FF0000</item> <!-- Example: Red text color -->
-        <item name="android:textSize">16sp</item> <!-- Example: Text size -->
+    <!-- Custom button style -->
+    <style name="RoundedButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="cornerRadius">16dp</item>
+    </style>
+    <style name="CustomDateTextAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">#FFFFFF</item>
     </style>
 </resources>
