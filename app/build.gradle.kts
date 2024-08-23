@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "com.sharonsalman.fittrack"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -47,13 +47,15 @@ dependencies {
     implementation(libs.annotation)
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)
-    implementation(libs.legacy.support.v4)
     implementation(libs.firebase.auth)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
     implementation(libs.fragment)
     implementation(libs.firebase.database)
-    implementation(libs.recyclerview)
+    implementation(libs.recyclerview.v130)
+    implementation(libs.play.services.maps)
+    implementation(libs.room.common)
+    implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -65,11 +67,27 @@ dependencies {
     implementation (libs.retrofit)
     implementation (libs.converter.gson)
     implementation (libs.firebase.auth.v2110)
-    implementation (libs.firebase.bom)
+    implementation(platform(libs.firebase.bom))
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-database")
+    implementation("com.google.firebase:firebase-firestore")
     implementation (libs.google.firebase.database)
     implementation(libs.recyclerview.v130)
     implementation (libs.glide)
     annotationProcessor (libs.glide.compiler)
+    implementation (libs.picasso)
+    implementation(libs.mpandroidchart)
+    implementation (libs.graphview)
+    implementation ("com.github.prolificinteractive:material-calendarview:2.0.1")
+
+
+
+
+
+
+
+
+
 
 
 

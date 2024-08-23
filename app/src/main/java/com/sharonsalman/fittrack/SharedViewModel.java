@@ -12,9 +12,10 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.sharonsalman.fittrack.Programs.Exercise;
+import com.sharonsalman.fittrack.Programs.FitnessProgram;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class SharedViewModel extends AndroidViewModel {

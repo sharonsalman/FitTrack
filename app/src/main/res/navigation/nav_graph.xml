@@ -137,7 +137,7 @@
     <!-- Main Screen Fragment -->
     <fragment
         android:id="@+id/main_screen_fragment"
-        android:name="com.sharonsalman.fittrack.main_screen_fragment"
+        android:name="com.sharonsalman.fittrack.mainscreen.MainScreenFragment"
         android:label="Main Screen Fragment"
         tools:layout="@layout/main_screen_fragment">
         <action
@@ -156,26 +156,37 @@
 
     <fragment
         android:id="@+id/fitnessProgramsFragment"
-        android:name="com.sharonsalman.fittrack.FitnessProgramsFragment"
+        android:name="com.sharonsalman.fittrack.Programs.FitnessProgramsFragment"
         android:label="Fitness Programs"
-        tools:layout="@layout/fragment_fitness_programs" />
+        tools:layout="@layout/fragment_fitness_programs" >
+        <action
+            android:id="@+id/action_fitnessProgramsFragment_to_main_screen_fragment"
+            app:destination="@id/main_screen_fragment" />
+        <action
+            android:id="@+id/action_fitnessProgramsFragment_to_programDetailsFragment"
+            app:destination="@id/programDetailsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/calendarFragment"
-        android:name="com.sharonsalman.fittrack.CalendarFragment"
+        android:name="com.sharonsalman.fittrack.mainscreen.CalendarFragment"
         android:label="Calendar"
         tools:layout="@layout/fragment_calendar" />
 
     <fragment
         android:id="@+id/trackFragment"
-        android:name="com.sharonsalman.fittrack.TrackFragment"
+        android:name="com.sharonsalman.fittrack.mainscreen.TrackFragment"
         android:label="Track"
         tools:layout="@layout/fragment_track" />
 
     <fragment
         android:id="@+id/goalsFragment"
-        android:name="com.sharonsalman.fittrack.GoalsFragment"
+        android:name="com.sharonsalman.fittrack.mainscreen.GoalsFragment"
         android:label="Goals"
         tools:layout="@layout/fragment_goals" />
+    <fragment
+        android:id="@+id/programDetailsFragment"
+        android:name="com.sharonsalman.fittrack.Programs.ProgramDetailsFragment"
+        android:label="ProgramDetailsFragment" />
 
 </navigation>

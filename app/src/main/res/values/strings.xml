@@ -15,6 +15,16 @@
     <string name="welcome_back">Welcome back!</string>
     <string name="enter_password">enter_password</string>
     <string name="Password" />
+    <string name="no_program_selected">no program selected</string>
+    <string name="workout_type">Workout Type: %1$s</string>
+    <string name="frequency">Frequency: %1$s</string>
+    <string name="difficulty">Difficulty: %1$s</string>
+
+    <string-array name="exercise_types">
+        <item>Running</item>
+        <item>Walking</item>
+        <item>Biking</item>
+    </string-array>
     <string-array name="age_ranges">
         <item>18-25</item>
         <item>26-35</item>
