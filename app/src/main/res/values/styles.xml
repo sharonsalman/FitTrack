@@ -1,0 +1,7 @@
+<!-- res/values/styles.xml -->
+<resources>
+    <style name="CustomDateTextAppearance">
+        <item name="android:textColor">#FF0000</item> <!-- Example: Red text color -->
+        <item name="android:textSize">16sp</item> <!-- Example: Text size -->
+    </style>
+</resources>
