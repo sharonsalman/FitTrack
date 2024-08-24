@@ -6,12 +6,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,7 +41,9 @@ public class ProgramDetailsFragment extends Fragment {
     private List<String> exerciseHowToPerform = new ArrayList<>();
     private List<Integer> exerciseSets = new ArrayList<>();
     private List<Integer> exerciseReps = new ArrayList<>();
-    private FitnessProgram program; // Change from programId to FitnessProgram object
+    private FitnessProgram program;
+    private Button buttonPickProgram;
+    private FitnessViewModel fitnessViewModel;
 
     // UI components
     private ImageView programImage;
@@ -67,6 +74,10 @@ public class ProgramDetailsFragment extends Fragment {
         exerciseAdapter = new ExerciseAdapter(exerciseNames, exerciseCategories, exerciseHowToPerform, exerciseSets, exerciseReps);
         recyclerViewExercises.setAdapter(exerciseAdapter);
 
+        fitnessViewModel = new ViewModelProvider(requireActivity()).get(FitnessViewModel.class);
+        // Initialize UI components
+        initializeUIComponents(view);
+
         // Retrieve program from arguments if available
         if (getArguments() != null) {
             program = getArguments().getParcelable("program");
@@ -75,10 +86,30 @@ public class ProgramDetailsFragment extends Fragment {
                 populateUI(program);
             } else {
                 Log.e(TAG, "Program object is null.");
+                Toast.makeText(getContext(), "Error: Could not load program details", Toast.LENGTH_LONG).show();
+                // Consider navigating back or to an error screen
             }
+        } else {
+            Log.e(TAG, "No arguments provided to fragment");
+            Toast.makeText(getContext(), "Error: No program selected", Toast.LENGTH_LONG).show();
         }
+        // Set up Pick Program button
+        buttonPickProgram = view.findViewById(R.id.button_pick_program);
+        buttonPickProgram.setOnClickListener(v -> pickProgram());
 
         return view;
+    }
+
+    private void initializeUIComponents(View view) {
+        // ... (initialize your UI components here)
+    }
+    private void pickProgram() {
+        if (program != null) {
+            fitnessViewModel.selectProgram(program);
+            Toast.makeText(getContext(), "Program selected: " + program.getName(), Toast.LENGTH_SHORT).show();
+            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
+            navController.navigate(R.id.action_programDetailsFragment_to_main_screen_fragment);
+        }
     }
 
     private void populateUI(FitnessProgram program) {
@@ -114,6 +145,11 @@ public class ProgramDetailsFragment extends Fragment {
         exerciseAdapter.notifyDataSetChanged();
 
         Log.d(TAG, "Populated exercises: " + exerciseNames.size());
+        fitnessViewModel.getSelectedProgram().observe(getViewLifecycleOwner(), selectedProgram -> {
+            boolean isProgramSelected = selectedProgram != null && selectedProgram.getId().equals(program.getId());
+            buttonPickProgram.setEnabled(!isProgramSelected);
+            buttonPickProgram.setText(isProgramSelected ? "Program Selected" : "Pick This Program");
+        });
     }
 
     private void fetchExercises() {

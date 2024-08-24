@@ -6,20 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".mainscreen.MainScreenFragment">
 
-    <!-- Container for the fragment navigation -->
-    <FrameLayout
-        android:id="@+id/nav_host_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/bottom_navigation"
-        android:layout_marginBottom="-2dp" />
-
     <!-- ImageView to display program's photo with reduced size -->
     <ImageView
         android:id="@+id/programImageView"
         android:layout_width="374dp"
         android:layout_height="121dp"
-        android:layout_below="@+id/nav_host_fragment"
         android:layout_alignParentTop="true"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
@@ -39,6 +30,24 @@
         android:textSize="18sp"
         android:textColor="@android:color/black"
         android:layout_below="@+id/programImageView" />
+
+    <!-- Button to display My Program -->
+    <Button
+        android:id="@+id/selectprogram"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="My Program"
+        android:layout_below="@+id/programNameTextView"
+        android:layout_margin="16dp" />
+
+    <!-- FrameLayout for the fragment navigation -->
+    <FrameLayout
+        android:id="@+id/nav_host_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/selectprogram"
+        android:layout_above="@+id/bottom_navigation"
+        android:layout_marginBottom="-2dp" />
 
     <!-- Bottom Navigation View -->
     <com.google.android.material.bottomnavigation.BottomNavigationView

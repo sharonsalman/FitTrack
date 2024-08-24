@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sharonsalman.fittrack.R;
+import com.sharonsalman.fittrack.UserData;
 
 public class FitnessProgramsFragment extends Fragment implements FitnessProgramAdapter.OnProgramSelectedListener {
 
@@ -33,7 +34,8 @@ public class FitnessProgramsFragment extends Fragment implements FitnessProgramA
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fitness_programs, container, false);
-        super.onViewCreated(view, savedInstanceState);
+
+        fitnessViewModel = new ViewModelProvider(this).get(FitnessViewModel.class);
         recyclerView = view.findViewById(R.id.recycler_view_fitness_programs);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new FitnessProgramAdapter();
@@ -45,49 +47,56 @@ public class FitnessProgramsFragment extends Fragment implements FitnessProgramA
         difficultySpinner = view.findViewById(R.id.spinner_difficulty);
 
         setupSpinners();
+        fetchAndApplyUserData();
 
-        fitnessViewModel = new ViewModelProvider(this).get(FitnessViewModel.class);
         fitnessViewModel.getFitnessPrograms().observe(getViewLifecycleOwner(), fitnessPrograms -> {
             if (fitnessPrograms != null) {
                 adapter.setFitnessPrograms(fitnessPrograms);
             }
         });
 
+        return view;
+    }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setupSpinners();
+
         workoutTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("FitnessProgramsFragment", "Selected Workout Type: " + parent.getItemAtPosition(position).toString());
                 applyFilters();
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
 
         frequencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("FitnessProgramsFragment", "Selected Frequency: " + parent.getItemAtPosition(position).toString());
                 applyFilters();
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
 
         difficultySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("FitnessProgramsFragment", "Selected Difficulty: " + parent.getItemAtPosition(position).toString());
                 applyFilters();
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
-
-        return view;
     }
+
+
     @Override
     public void onProgramSelected(FitnessProgram program) {
         Bundle bundle = new Bundle();
@@ -96,26 +105,56 @@ public class FitnessProgramsFragment extends Fragment implements FitnessProgramA
         navController.navigate(R.id.action_fitnessProgramsFragment_to_programDetailsFragment, bundle);
     }
 
+    private void fetchAndApplyUserData() {
+        fitnessViewModel.fetchUserData();
+        fitnessViewModel.getUserData().observe(getViewLifecycleOwner(), this::applyUserData);
+    }
 
+    private void applyUserData(UserData userData) {
+        if (userData != null) {
+            setSpinnerToValue(workoutTypeSpinner, mapWorkoutLocation(userData.getWorkoutLocation()));
+            setSpinnerToValue(frequencySpinner, mapWorkoutFrequency(userData.getWorkoutFrequency()));
+            setSpinnerToValue(difficultySpinner, mapFitnessLevel(userData.getFitnessLevel()));
+            applyFilters();
+        }
+    }
 
-    private void setupSpinners() {
-        // Populate workout type spinner with existing values
-        ArrayAdapter<CharSequence> workoutTypeAdapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.workout_location, android.R.layout.simple_spinner_item);
-        workoutTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        workoutTypeSpinner.setAdapter(workoutTypeAdapter);
+    private String mapWorkoutLocation(String location) {
+        switch (location.toLowerCase()) {
+            case "home workout":
+                return "Home";
+            case "gym":
+                return "Gym workout";
+            default:
+                return "All";
+        }
+    }
 
-        // Populate frequency spinner with existing values
-        ArrayAdapter<CharSequence> frequencyAdapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.workout_frequency, android.R.layout.simple_spinner_item);
-        frequencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        frequencySpinner.setAdapter(frequencyAdapter);
+    private String mapWorkoutFrequency(int frequency) {
+        if (frequency <= 2) return "1-2 times a week";
+        else if (frequency <= 4) return "3-4 times a week";
+        else return "5+ times a week";
+    }
 
-        // Populate difficulty spinner with existing values
-        ArrayAdapter<CharSequence> difficultyAdapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.fitness_level, android.R.layout.simple_spinner_item);
-        difficultyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        difficultySpinner.setAdapter(difficultyAdapter);
+    private String mapFitnessLevel(String level) {
+        switch (level.toLowerCase()) {
+            case "beginner":
+                return "Beginner";
+            case "intermediate":
+                return "Intermediate";
+            case "advanced":
+                return "Advanced";
+            default:
+                return "All";
+        }
+    }
+
+    private void setSpinnerToValue(Spinner spinner, String value) {
+        ArrayAdapter<CharSequence> adapter = (ArrayAdapter<CharSequence>) spinner.getAdapter();
+        int position = adapter.getPosition(value);
+        if (position >= 0) {
+            spinner.setSelection(position);
+        }
     }
 
     private void applyFilters() {
@@ -123,9 +162,32 @@ public class FitnessProgramsFragment extends Fragment implements FitnessProgramA
         String frequency = frequencySpinner.getSelectedItem().toString();
         String difficulty = difficultySpinner.getSelectedItem().toString();
 
-        Log.d("FitnessProgramsFragment", "Applying filters: workoutType=" + workoutType + ", frequency=" + frequency + ", difficulty=" + difficulty);
+        Log.d("FitnessProgramsFragment", "Applying filters - Workout Type: " + workoutType + ", Frequency: " + frequency + ", Difficulty: " + difficulty);
 
         fitnessViewModel.filterPrograms(workoutType, frequency, difficulty);
+    }
+
+
+    private void setupSpinners() {
+        ArrayAdapter<CharSequence> workoutTypeAdapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.workout_location, android.R.layout.simple_spinner_item);
+        workoutTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        workoutTypeSpinner.setAdapter(workoutTypeAdapter);
+        Log.d("FitnessProgramsFragment", "Workout Type: " + workoutTypeSpinner.getSelectedItem().toString());
+
+
+        ArrayAdapter<CharSequence> frequencyAdapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.workout_frequency, android.R.layout.simple_spinner_item);
+        frequencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        frequencySpinner.setAdapter(frequencyAdapter);
+        Log.d("FitnessProgramsFragment", "Frequency: " + frequencySpinner.getSelectedItem().toString());
+
+        ArrayAdapter<CharSequence> difficultyAdapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.fitness_level, android.R.layout.simple_spinner_item);
+        difficultyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        difficultySpinner.setAdapter(difficultyAdapter);
+        Log.d("FitnessProgramsFragment", "Difficulty: " + difficultySpinner.getSelectedItem().toString());
+
     }
 
 }

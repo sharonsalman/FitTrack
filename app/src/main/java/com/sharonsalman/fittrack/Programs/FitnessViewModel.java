@@ -14,6 +14,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.sharonsalman.fittrack.UserData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,12 @@ public class FitnessViewModel extends ViewModel {
     private final MutableLiveData<List<FitnessProgram>> filteredPrograms = new MutableLiveData<>();
     private final MutableLiveData<FitnessProgram> selectedProgram = new MutableLiveData<>();
     private final DatabaseReference reference;
+    private List<FitnessProgram> programs = new ArrayList<>();
+
+    public void setPrograms(List<FitnessProgram> programs) {
+        this.programs = programs;
+
+    }
 
     public FitnessViewModel() {
         reference = FirebaseDatabase.getInstance("https://fittrack-70436-default-rtdb.europe-west1.firebasedatabase.app")
@@ -36,7 +43,7 @@ public class FitnessViewModel extends ViewModel {
     public LiveData<FitnessProgram> getSelectedProgram() {
         return selectedProgram;
     }
-
+    private final MutableLiveData<UserData> userData = new MutableLiveData<>();
     public LiveData<List<FitnessProgram>> getFitnessPrograms() {
         return filteredPrograms;
     }
@@ -124,31 +131,70 @@ public class FitnessViewModel extends ViewModel {
     public void filterPrograms(String workoutType, String frequency, String difficulty) {
         List<FitnessProgram> allPrograms = fitnessPrograms.getValue();
         if (allPrograms == null) {
+            Log.d("FitnessViewModel", "No programs available for filtering");
             filteredPrograms.setValue(new ArrayList<>());
             return;
         }
 
         List<FitnessProgram> filteredList = new ArrayList<>();
         for (FitnessProgram program : allPrograms) {
-            boolean matchesWorkoutType = workoutType.isEmpty() || workoutType.equals("All") ||
-                    program.getWorkoutType().toLowerCase().contains(workoutType.toLowerCase());
-            boolean matchesFrequency = frequency.isEmpty() || frequency.equals("All") ||
-                    program.getFrequency().equalsIgnoreCase(frequency);
-            boolean matchesDifficulty = difficulty.isEmpty() || difficulty.equals("All") ||
-                    program.getDifficulty().equalsIgnoreCase(difficulty);
-
+            boolean matchesWorkoutType = workoutType.equals("All") || program.getWorkoutType().toLowerCase().contains(workoutType.toLowerCase());
+            boolean matchesFrequency = frequency.equals("All") || program.getFrequency().equalsIgnoreCase(frequency);
+            boolean matchesDifficulty = difficulty.equals("All") || program.getDifficulty().equalsIgnoreCase(difficulty);
+            Log.d("FitnessViewModel", "Comparing - Program: " + program.getWorkoutType() + ", Filter: " + workoutType + ", Match: " + matchesWorkoutType);
             if (matchesWorkoutType && matchesFrequency && matchesDifficulty) {
                 filteredList.add(program);
             }
-
-            Log.d(TAG, "Program: " + program.getName()
-                    + "\nType: " + program.getWorkoutType() + " (Matches: " + matchesWorkoutType + ")"
-                    + "\nFrequency: " + program.getFrequency() + " (Matches: " + matchesFrequency + ")"
-                    + "\nDifficulty: " + program.getDifficulty() + " (Matches: " + matchesDifficulty + ")");
         }
 
-        Log.d(TAG, "Filtered programs count: " + filteredList.size());
+        Log.d("FitnessViewModel", "Filtered programs count: " + filteredList.size());
         filteredPrograms.setValue(filteredList);
+    }
+
+    public List<FitnessProgram> getFilteredPrograms(String workoutType, String frequency, String difficulty) {
+        List<FitnessProgram> filteredPrograms = new ArrayList<>();
+        for (FitnessProgram program : programs) {
+            boolean matches = true;
+            if (workoutType != null && !program.getWorkoutType().equalsIgnoreCase(workoutType)) {
+                matches = false;
+            }
+            if (frequency != null && !program.getFrequency().equalsIgnoreCase(frequency)) {
+                matches = false;
+            }
+            if (difficulty != null && !program.getDifficulty().equalsIgnoreCase(difficulty)) {
+                matches = false;
+            }
+            if (matches) {
+                filteredPrograms.add(program);
+            }
+        }
+        return filteredPrograms;
+    }
+
+
+    public LiveData<UserData> getUserData() {
+        return userData;
+    }
+    public void fetchUserData() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String userId = user.getUid();
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("usersadddelete").child(userId);
+            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    UserData data = dataSnapshot.getValue(UserData.class);
+                    if (data != null) {
+                        userData.setValue(data);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.e(TAG, "Error fetching user data", databaseError.toException());
+                }
+            });
+        }
     }
 
 }
