@@ -35,8 +35,8 @@ public class UserViewModel extends ViewModel {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (firebaseUser != null) {
-            String email = firebaseUser.getEmail().replace(".", "_");
-            reference.child(email).addListenerForSingleValueEvent(new ValueEventListener() {
+            String uid = firebaseUser.getUid(); // Use UID for fetching data
+            reference.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     try {
@@ -66,6 +66,7 @@ public class UserViewModel extends ViewModel {
             Log.e(TAG, "No authenticated user found");
         }
     }
+
 
     // Helper method to get String from DataSnapshot
     private String getStringFromSnapshot(DataSnapshot snapshot) {
@@ -103,10 +104,11 @@ public class UserViewModel extends ViewModel {
     public void updateUserFitnessData(UserFitnessData updatedFitnessData) {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null) {
-            String email = firebaseUser.getEmail().replace(".", "_");
-            reference.child(email).setValue(updatedFitnessData)
+            String uid = firebaseUser.getUid(); // Use UID for updating data
+            reference.child(uid).setValue(updatedFitnessData)
                     .addOnSuccessListener(aVoid -> Log.d(TAG, "User fitness data updated successfully"))
                     .addOnFailureListener(e -> Log.e(TAG, "Error updating user fitness data", e));
         }
     }
+
 }

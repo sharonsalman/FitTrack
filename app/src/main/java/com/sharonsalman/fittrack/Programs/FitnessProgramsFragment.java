@@ -131,10 +131,11 @@ public class FitnessProgramsFragment extends Fragment implements FitnessProgramA
     }
 
     private String mapWorkoutFrequency(int frequency) {
-        if (frequency <= 2) return "1-2 times a week";
-        else if (frequency <= 4) return "3-4 times a week";
-        else return "5+ times a week";
+        if (frequency == 2) return "1-2 times a week";
+        else if (frequency == 3) return "2-3 times a week";
+        else return "4-5 times a week";
     }
+
 
     private String mapFitnessLevel(String level) {
         switch (level.toLowerCase()) {

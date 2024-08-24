@@ -48,10 +48,10 @@ public class workout_frequency_fragment extends Fragment {
 
     }
     private int parseFrequency(String frequency) {
-        // Convert frequency string to an integer value
         if (frequency.contains("1-2 times a week")) return 2;
-        if (frequency.contains("3-4 times a week")) return 4;
-        if (frequency.contains("5+ times a week")) return 5;
+        if (frequency.contains("2-3 times a week")) return 3;
+        if (frequency.contains("4-5 times a week")) return 4;
         return 0; // Default value if none of the cases match
     }
+
 }
