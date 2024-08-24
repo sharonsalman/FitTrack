@@ -7,19 +7,23 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.sharonsalman.fittrack.Programs.Exercise;
-import com.sharonsalman.fittrack.Programs.FitnessProgram;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class SharedViewModel extends AndroidViewModel {
+
     private FirebaseDatabase database;
+    private FirebaseAuth auth;
+    private SharedPreferences sharedPreferences;
+
     private static final String PREFERENCES_FILE = "com.sharonsalman.fittrack.preferences";
     private static final String EMAIL_KEY = "email";
     private static final String PASSWORD_KEY = "password";
@@ -31,8 +35,6 @@ public class SharedViewModel extends AndroidViewModel {
     private static final String GOALS_KEY = "goals";
     private static final String CURRENT_WEIGHT_KEY = "current_weight";
     private static final String TARGET_WEIGHT_KEY = "target_weight";
-
-    private SharedPreferences sharedPreferences;
 
     private final MutableLiveData<String> email = new MutableLiveData<>();
     private final MutableLiveData<String> name = new MutableLiveData<>();
@@ -48,6 +50,7 @@ public class SharedViewModel extends AndroidViewModel {
     public SharedViewModel(@NonNull Application application) {
         super(application);
         database = FirebaseDatabase.getInstance("https://fittrack-70436-default-rtdb.europe-west1.firebasedatabase.app");
+        auth = FirebaseAuth.getInstance();
         sharedPreferences = application.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
         loadPreferences();
     }
@@ -95,8 +98,14 @@ public class SharedViewModel extends AndroidViewModel {
             Log.e("SharedViewModel", "Attempt to set null email");
             return;
         }
-        String trimmedEmail = email.trim();
+
+        // Replace accidental commas with periods
+        String cleanedEmail = email.replace(",", ".");
+
+        String trimmedEmail = cleanedEmail.trim();
         Log.d("SharedViewModel", "Setting email: " + trimmedEmail);
+
+        // Validate email format
         if (android.util.Patterns.EMAIL_ADDRESS.matcher(trimmedEmail).matches()) {
             this.email.setValue(trimmedEmail);
             try {
@@ -173,7 +182,6 @@ public class SharedViewModel extends AndroidViewModel {
             return;
         }
 
-        FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.createUserWithEmailAndPassword(storedEmail, storedPassword)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -189,7 +197,6 @@ public class SharedViewModel extends AndroidViewModel {
     }
 
     public void saveDataToFirebase(OnSaveCompleteListener listener) {
-        String emailValue = email.getValue();
         String nameValue = name.getValue();
         Integer ageValue = age.getValue();
         Integer workoutFrequencyValue = workoutFrequency.getValue();
@@ -199,12 +206,23 @@ public class SharedViewModel extends AndroidViewModel {
         Float currentWeightValue = currentWeight.getValue();
         Float targetWeightValue = targetWeight.getValue();
 
-        if (emailValue == null || nameValue == null || ageValue == null || workoutFrequencyValue == null ||
+        if (nameValue == null || ageValue == null || workoutFrequencyValue == null ||
                 fitnessLevelValue == null || workoutLocationValue == null || goalsValue == null ||
                 currentWeightValue == null || targetWeightValue == null) {
             listener.onSaveComplete(false, "Data is incomplete");
             return;
         }
+
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = auth.getCurrentUser();
+
+        if (firebaseUser == null) {
+            listener.onSaveComplete(false, "No authenticated user found");
+            return;
+        }
+
+        String uid = firebaseUser.getUid(); // Get the Firebase UID
+        DatabaseReference userRef = database.getReference("users").child(uid);
 
         Map<String, Object> userMap = new HashMap<>();
         userMap.put("name", nameValue);
@@ -216,49 +234,18 @@ public class SharedViewModel extends AndroidViewModel {
         userMap.put("currentWeight", currentWeightValue);
         userMap.put("targetWeight", targetWeightValue);
 
-        DatabaseReference userRef = database.getReference("users").child(emailValue);
-        userRef.setValue(userMap)
-                .addOnSuccessListener(aVoid -> listener.onSaveComplete(true, "Data saved successfully"))
-                .addOnFailureListener(e -> listener.onSaveComplete(false, "Error saving data: " + e.getMessage()));
+        userRef.updateChildren(userMap)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        listener.onSaveComplete(true, "Data saved successfully");
+                    } else {
+                        listener.onSaveComplete(false, "Save failed: " + task.getException().getMessage());
+                    }
+                });
     }
+
 
     public interface OnSaveCompleteListener {
         void onSaveComplete(boolean success, String message);
-    }
-
-    // Fitness Program and Exercise Methods
-
-    public void fetchPrograms(OnFetchCompleteListener listener) {
-        DatabaseReference programsRef = database.getReference("programs");
-
-        programsRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Map<String, FitnessProgram> programs = (Map<String, FitnessProgram>) task.getResult().getValue();
-                listener.onFetchComplete(true, programs);
-            } else {
-                listener.onFetchComplete(false, "Failed to fetch programs: " + task.getException().getMessage());
-            }
-        });
-    }
-
-
-    public void addProgram(String programId, FitnessProgram program, OnSaveCompleteListener listener) {
-        DatabaseReference programsRef = database.getReference("programs").child(programId);
-
-        programsRef.setValue(program)
-                .addOnSuccessListener(aVoid -> listener.onSaveComplete(true, "Program added successfully"))
-                .addOnFailureListener(e -> listener.onSaveComplete(false, "Error adding program: " + e.getMessage()));
-    }
-
-    public void addExercise(String exerciseId, Exercise exercise, OnSaveCompleteListener listener) {
-        DatabaseReference exercisesRef = database.getReference("exercises").child(exerciseId);
-
-        exercisesRef.setValue(exercise)
-                .addOnSuccessListener(aVoid -> listener.onSaveComplete(true, "Exercise added successfully"))
-                .addOnFailureListener(e -> listener.onSaveComplete(false, "Error adding exercise: " + e.getMessage()));
-    }
-
-    public interface OnFetchCompleteListener {
-        void onFetchComplete(boolean success, Object data);
     }
 }

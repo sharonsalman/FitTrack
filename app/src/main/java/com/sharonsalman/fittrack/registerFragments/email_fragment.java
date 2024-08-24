@@ -59,7 +59,9 @@ public class email_fragment extends Fragment {
         }
         return true;
     }
-
+private String sanitizeEmail(String email) {
+    return email.replace(".", ",");
+}
     private boolean isValidPassword(String password) {
         if (password.isEmpty()) {
             binding.passwordEditText.setError("Password cannot be empty");
@@ -84,29 +86,30 @@ public class email_fragment extends Fragment {
         return true;
     }
 
-    private void checkExistingEmail(String email) {
-        mAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                SignInMethodQueryResult result = task.getResult();
-                if (result != null && result.getSignInMethods() != null && !result.getSignInMethods().isEmpty()) {
-                    // Email exists
-                    binding.emailEditText.setError("This email is already in use");
-                } else {
-                    // Email doesn't exist, proceed with account creation
-                    createAccount(email, binding.passwordEditText.getText().toString().trim());
-                }
+   private void checkExistingEmail(String email) {
+    String sanitizedEmail = sanitizeEmail(email);
+    mAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener(task -> {
+        if (task.isSuccessful()) {
+            SignInMethodQueryResult result = task.getResult();
+            if (result != null && result.getSignInMethods() != null && !result.getSignInMethods().isEmpty()) {
+                // Email exists
+                binding.emailEditText.setError("This email is already in use");
             } else {
-                // Handle the error
-                Toast.makeText(getContext(), "Error checking email: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                // Email doesn't exist, proceed with account creation
+                createAccount(sanitizedEmail, binding.passwordEditText.getText().toString().trim());
             }
-        });
-    }
+        } else {
+            // Handle the error
+            Toast.makeText(getContext(), "Error checking email: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    });
+}
 
-    private void createAccount(String email, String password) {
-        sharedViewModel.setEmail(email);
-        sharedViewModel.setPassword(password);
-        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_emailFragment_to_nameFragment);
-    }
+private void createAccount(String email, String password) {
+    sharedViewModel.setEmail(email);
+    sharedViewModel.setPassword(password);
+    Navigation.findNavController(binding.getRoot()).navigate(R.id.action_emailFragment_to_nameFragment);
+}
 
     private void showError(String errorMessage) {
         Toast.makeText(getContext(), "Registration failed: " + errorMessage, Toast.LENGTH_LONG).show();

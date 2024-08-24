@@ -21,6 +21,8 @@ public class FitnessProgram implements Parcelable {
     private String imageUrl;
 
     public FitnessProgram() {
+        exerciseSets = new ArrayList<>();
+        exerciseReps = new ArrayList<>();
     }
 
     public FitnessProgram(String id, String name, String description, List<String> exerciseNames, List<String> exerciseCategories, List<String> exerciseHowToPerform, List<Integer> exerciseSets, List<Integer> exerciseReps, String workoutType, String frequency, String difficulty, String imageUrl) {

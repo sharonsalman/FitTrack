@@ -26,23 +26,32 @@ public class workout_frequency_fragment extends Fragment {
         binding = FragmentWorkoutFrequencyBinding.inflate(inflater, container, false);
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
-
-        Spinner workoutfrequencySpinner = binding.workoutfrequencySpinner;
+        Spinner workoutFrequencySpinner = binding.workoutfrequencySpinner;
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(requireContext(),
                 R.array.workout_frequency, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        workoutfrequencySpinner.setAdapter(adapter);
+        workoutFrequencySpinner.setAdapter(adapter);
 
         // Handle button click
         binding.nextButton.setOnClickListener(v -> {
-            String selectedWorkoufrequency = (String) workoutfrequencySpinner.getSelectedItem();
-            sharedViewModel.setAge(Integer.parseInt(selectedWorkoufrequency.split("-")[0]));
+            String selectedFrequency = (String) workoutFrequencySpinner.getSelectedItem();
+            int frequencyValue = parseFrequency(selectedFrequency);
+            sharedViewModel.setWorkoutFrequency(frequencyValue);
             Navigation.findNavController(v).navigate(R.id.action_workoutFrequencyFragment_to_fitnessLevelFragment);
         });
+
         binding.prevButton.setOnClickListener(v -> {
             Navigation.findNavController(v).navigate(R.id.action_workoutFrequencyFragment_to_ageFragment);
         });
 
         return binding.getRoot();
+
+    }
+    private int parseFrequency(String frequency) {
+        // Convert frequency string to an integer value
+        if (frequency.contains("1-2 times a week")) return 2;
+        if (frequency.contains("3-4 times a week")) return 4;
+        if (frequency.contains("5+ times a week")) return 5;
+        return 0; // Default value if none of the cases match
     }
 }

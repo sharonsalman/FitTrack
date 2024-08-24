@@ -63,43 +63,45 @@ public class target_weight_fragment extends Fragment {
 
         return binding.getRoot();
     }
-
+private String sanitizeEmail(String email) {
+    return email.replace(".", ",");
+}
     private void registerUser(String email, String password) {
-        Log.d("Registration", "Starting user registration");
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Log.d("Registration", "Firebase authentication successful");
-                        sharedViewModel.saveDataToFirebase(new SharedViewModel.OnSaveCompleteListener() {
-                            @Override
-                            public void onSaveComplete(boolean saveSuccess, String saveMessage) {
-                                Log.d("Registration", "Save data complete. Success: " + saveSuccess + ", Message: " + saveMessage);
-                                requireActivity().runOnUiThread(() -> {
-                                    if (saveSuccess) {
-                                        Log.d("Registration", "Attempting to show success toast and navigate");
-                                        Toast.makeText(requireContext(), "Registration complete!", Toast.LENGTH_SHORT).show();
-                                        try {
-                                            Navigation.findNavController(binding.getRoot()).navigate(R.id.action_targetweightFragment_to_main_screen_fragment);
-                                            Log.d("Registration", "Navigation action called");
-                                        } catch (Exception e) {
-                                            Log.e("Registration", "Navigation failed", e);
-                                        }
-                                    } else {
-                                        Log.e("Registration", "Failed to save data: " + saveMessage);
-                                        Toast.makeText(requireContext(), "Error saving data: " + saveMessage, Toast.LENGTH_LONG).show();
+    String sanitizedEmail = sanitizeEmail(email);
+    Log.d("Registration", "Starting user registration");
+    mAuth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Log.d("Registration", "Firebase authentication successful");
+                    sharedViewModel.saveDataToFirebase(new SharedViewModel.OnSaveCompleteListener() {
+                        @Override
+                        public void onSaveComplete(boolean saveSuccess, String saveMessage) {
+                            Log.d("Registration", "Save data complete. Success: " + saveSuccess + ", Message: " + saveMessage);
+                            requireActivity().runOnUiThread(() -> {
+                                if (saveSuccess) {
+                                    Log.d("Registration", "Attempting to show success toast and navigate");
+                                    Toast.makeText(requireContext(), "Registration complete!", Toast.LENGTH_SHORT).show();
+                                    try {
+                                        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_targetweightFragment_to_main_screen_fragment);
+                                        Log.d("Registration", "Navigation action called");
+                                    } catch (Exception e) {
+                                        Log.e("Registration", "Navigation failed", e);
                                     }
-                                });
-                            }
-                        });
-                    } else {
-                        Log.e("Registration", "Firebase authentication failed", task.getException());
-                        requireActivity().runOnUiThread(() -> {
-                            Toast.makeText(requireContext(), "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                        });
-                    }
-                });
-    }
-
+                                } else {
+                                    Log.e("Registration", "Failed to save data: " + saveMessage);
+                                    Toast.makeText(requireContext(), "Error saving data: " + saveMessage, Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    Log.e("Registration", "Firebase authentication failed", task.getException());
+                    requireActivity().runOnUiThread(() -> {
+                        Toast.makeText(requireContext(), "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    });
+                }
+            });
+}
 
 
     @Override
