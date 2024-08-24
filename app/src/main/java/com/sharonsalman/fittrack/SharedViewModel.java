@@ -241,18 +241,6 @@ public class SharedViewModel extends AndroidViewModel {
         });
     }
 
-    public void fetchExercises(OnFetchCompleteListener listener) {
-        DatabaseReference exercisesRef = database.getReference("exercises");
-
-        exercisesRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Map<String, Exercise> exercises = (Map<String, Exercise>) task.getResult().getValue();
-                listener.onFetchComplete(true, exercises);
-            } else {
-                listener.onFetchComplete(false, "Failed to fetch exercises: " + task.getException().getMessage());
-            }
-        });
-    }
 
     public void addProgram(String programId, FitnessProgram program, OnSaveCompleteListener listener) {
         DatabaseReference programsRef = database.getReference("programs").child(programId);

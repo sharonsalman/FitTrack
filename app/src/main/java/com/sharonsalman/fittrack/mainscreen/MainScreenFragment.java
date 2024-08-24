@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,6 +36,7 @@ public class MainScreenFragment extends Fragment {
     private FitnessViewModel fitnessViewModel;
     private TextView programNameTextView;
     private ImageView programImageView;
+    private Button viewProgramDetailsButton;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -51,6 +53,7 @@ public class MainScreenFragment extends Fragment {
 
         programNameTextView = view.findViewById(R.id.programNameTextView);
         programImageView = view.findViewById(R.id.programImageView);
+        viewProgramDetailsButton = view.findViewById(R.id.selectprogram);
 
         fitnessViewModel.getSelectedProgram().observe(getViewLifecycleOwner(), program -> {
             Log.d("MainScreenFragment", "Observed program: " + program);
@@ -77,6 +80,14 @@ public class MainScreenFragment extends Fragment {
                             }
                         })
                         .into(programImageView);
+                viewProgramDetailsButton.setVisibility(View.VISIBLE);
+                viewProgramDetailsButton.setOnClickListener(v -> {
+                    Bundle args = new Bundle();
+                    args.putParcelable("program", program);
+                    args.putBoolean("fromMainScreen", true);
+                    NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
+                    navController.navigate(R.id.action_main_screen_fragment_to_programDetailsFragment, args);
+                });
             } else {
                 Log.d("MainScreenFragment", "Program is null");
                 programNameTextView.setText(R.string.no_program_selected);
@@ -89,7 +100,7 @@ public class MainScreenFragment extends Fragment {
         NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
 
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.calendarFragment, R.id.fitnessProgramsFragment, R.id.trackFragment, R.id.goalsFragment)
+                R.id.calendarFragment, R.id.fitnessProgramsFragment, R.id.trackFragment, R.id.goalsFragment, R.id.settingsFragment)
                 .build();
 
 // Create a custom OnNavigationItemSelectedListener
@@ -108,11 +119,13 @@ public class MainScreenFragment extends Fragment {
                 return true;
             } else if (itemId == R.id.fitnessProgramsFragment
                     || itemId == R.id.trackFragment
-                    || itemId == R.id.goalsFragment) {
+                    || itemId == R.id.goalsFragment
+                    || itemId == R.id.settingsFragment) {  // Add this line
                 return NavigationUI.onNavDestinationSelected(item, navController);
             }
             return false;
         });
+
 
         NavigationUI.setupActionBarWithNavController((AppCompatActivity) requireActivity(), navController, appBarConfiguration);
 

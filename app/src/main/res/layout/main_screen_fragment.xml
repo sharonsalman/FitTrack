@@ -39,6 +39,12 @@
         android:text="My Program"
         android:layout_below="@+id/programNameTextView"
         android:layout_margin="16dp" />
+    <Button
+        android:id="@+id/viewProgramDetailsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View Program Details"
+        android:visibility="gone" />
 
     <!-- FrameLayout for the fragment navigation -->
     <FrameLayout

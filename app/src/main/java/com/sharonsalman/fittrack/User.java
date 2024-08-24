@@ -1,5 +1,7 @@
 package com.sharonsalman.fittrack;
 
+import java.util.Map;
+
 public class User {
     private String email;
     private String password;
@@ -11,13 +13,15 @@ public class User {
     private String goal;
     private float currentWeight;
     private float targetWeight;
+    private Map<String, String> program_dates;
+    private String selectedProgram;
 
     // Empty constructor needed for Firebase
     public User() {}
 
     // Constructor with parameters
-    public User(String email, String name,String password, int age, String workoutFrequency, String fitnessLevel,
-                String workoutLocation, String goal, float currentWeight, float targetWeight) {
+    public User(String email, String name, String password, int age, String workoutFrequency, String fitnessLevel,
+                String workoutLocation, String goal, float currentWeight, float targetWeight, Map<String, String> program_dates, String selectedProgram) {
         this.email = email;
         this.name = name;
         this.password = password;
@@ -28,82 +32,44 @@ public class User {
         this.goal = goal;
         this.currentWeight = currentWeight;
         this.targetWeight = targetWeight;
+        this.program_dates = program_dates;
+        this.selectedProgram = selectedProgram;
     }
 
     // Getters and setters
-    public String getEmail() {
-        return email;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPassword(String password){ this.password = password;}
-
+    public void setPassword(String password) { this.password = password; }
     public String getPassword() { return password; }
 
-    public int getAge() {
-        return age;
-    }
+    public int getAge() { return age; }
+    public void setAge(int age) { this.age = age; }
 
-    public void setAge(int age) {
-        this.age = age;
-    }
+    public String getWorkoutFrequency() { return workoutFrequency; }
+    public void setWorkoutFrequency(String workoutFrequency) { this.workoutFrequency = workoutFrequency; }
 
-    public String getWorkoutFrequency() {
-        return workoutFrequency;
-    }
+    public String getFitnessLevel() { return fitnessLevel; }
+    public void setFitnessLevel(String fitnessLevel) { this.fitnessLevel = fitnessLevel; }
 
-    public void setWorkoutFrequency(String workoutFrequency) {
-        this.workoutFrequency = workoutFrequency;
-    }
+    public String getWorkoutLocation() { return workoutLocation; }
+    public void setWorkoutLocation(String workoutLocation) { this.workoutLocation = workoutLocation; }
 
-    public String getFitnessLevel() {
-        return fitnessLevel;
-    }
+    public String getGoal() { return goal; }
+    public void setGoal(String goal) { this.goal = goal; }
 
-    public void setFitnessLevel(String fitnessLevel) {
-        this.fitnessLevel = fitnessLevel;
-    }
+    public float getCurrentWeight() { return currentWeight; }
+    public void setCurrentWeight(float currentWeight) { this.currentWeight = currentWeight; }
 
-    public String getWorkoutLocation() {
-        return workoutLocation;
-    }
+    public float getTargetWeight() { return targetWeight; }
+    public void setTargetWeight(float targetWeight) { this.targetWeight = targetWeight; }
 
-    public void setWorkoutLocation(String workoutLocation) {
-        this.workoutLocation = workoutLocation;
-    }
+    public Map<String, String> getProgram_dates() { return program_dates; }
+    public void setProgram_dates(Map<String, String> program_dates) { this.program_dates = program_dates; }
 
-    public String getGoal() {
-        return goal;
-    }
-
-    public void setGoal(String goal) {
-        this.goal = goal;
-    }
-
-    public float getCurrentWeight() {
-        return currentWeight;
-    }
-
-    public void setCurrentWeight(float currentWeight) {
-        this.currentWeight = currentWeight;
-    }
-
-    public float getTargetWeight() {
-        return targetWeight;
-    }
-
-    public void setTargetWeight(float targetWeight) {
-        this.targetWeight = targetWeight;
-    }
+    public String getSelectedProgram() { return selectedProgram; }
+    public void setSelectedProgram(String selectedProgram) { this.selectedProgram = selectedProgram; }
 }

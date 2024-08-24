@@ -14,6 +14,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.sharonsalman.fittrack.User;
 import com.sharonsalman.fittrack.UserData;
 
 import java.util.ArrayList;
@@ -25,6 +26,8 @@ public class FitnessViewModel extends ViewModel {
     private final MutableLiveData<List<FitnessProgram>> fitnessPrograms = new MutableLiveData<>();
     private final MutableLiveData<List<FitnessProgram>> filteredPrograms = new MutableLiveData<>();
     private final MutableLiveData<FitnessProgram> selectedProgram = new MutableLiveData<>();
+    private final MutableLiveData<UserData> userData = new MutableLiveData<>();
+    private final MutableLiveData<User> user = new MutableLiveData<>();
     private final DatabaseReference reference;
     private List<FitnessProgram> programs = new ArrayList<>();
 
@@ -38,12 +41,13 @@ public class FitnessViewModel extends ViewModel {
                 .getReference("fitness_programs");
         Log.d(TAG, "Firebase reference initialized: " + reference.toString());
         loadFitnessPrograms();
+        fetchUserData();
     }
 
     public LiveData<FitnessProgram> getSelectedProgram() {
         return selectedProgram;
     }
-    private final MutableLiveData<UserData> userData = new MutableLiveData<>();
+
     public LiveData<List<FitnessProgram>> getFitnessPrograms() {
         return filteredPrograms;
     }
@@ -175,17 +179,42 @@ public class FitnessViewModel extends ViewModel {
     public LiveData<UserData> getUserData() {
         return userData;
     }
+
+    public LiveData<User> getUser() {
+        return user;
+    }
+
+
+    public void updateUserData(User updatedUser) {
+        Log.d(TAG, "Saving user data");
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null) {
+            String userId = firebaseUser.getUid();
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
+            userRef.setValue(updatedUser)
+                    .addOnSuccessListener(aVoid -> Log.d(TAG, "User data updated successfully"))
+                    .addOnFailureListener(e -> Log.e(TAG, "Error updating user data", e));
+        } else {
+            Log.e(TAG, "No authenticated user found");
+        }
+    }
     public void fetchUserData() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            String userId = user.getUid();
-            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("usersadddelete").child(userId);
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null) {
+            String userId = firebaseUser.getUid();
+            DatabaseReference userRef = FirebaseDatabase.getInstance()
+                    .getReference("users")
+                    .child(userId);
+
             userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     UserData data = dataSnapshot.getValue(UserData.class);
                     if (data != null) {
                         userData.setValue(data);
+                        Log.d(TAG, "User data fetched successfully");
+                    } else {
+                        Log.d(TAG, "No data found for the user");
                     }
                 }
 
@@ -194,6 +223,8 @@ public class FitnessViewModel extends ViewModel {
                     Log.e(TAG, "Error fetching user data", databaseError.toException());
                 }
             });
+        } else {
+            Log.e(TAG, "No authenticated user found");
         }
     }
 

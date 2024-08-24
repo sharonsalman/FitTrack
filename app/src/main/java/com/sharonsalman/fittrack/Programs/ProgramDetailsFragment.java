@@ -75,12 +75,23 @@ public class ProgramDetailsFragment extends Fragment {
         recyclerViewExercises.setAdapter(exerciseAdapter);
 
         fitnessViewModel = new ViewModelProvider(requireActivity()).get(FitnessViewModel.class);
+
+        buttonPickProgram = view.findViewById(R.id.button_pick_program);
+
         // Initialize UI components
         initializeUIComponents(view);
 
         // Retrieve program from arguments if available
         if (getArguments() != null) {
             program = getArguments().getParcelable("program");
+            boolean fromMainScreen = getArguments().getBoolean("fromMainScreen", false);
+            if (fromMainScreen) {
+                buttonPickProgram.setVisibility(View.GONE);
+            }
+            else {
+                buttonPickProgram.setVisibility(View.VISIBLE);
+                buttonPickProgram.setOnClickListener(v -> pickProgram());
+            }
             if (program != null) {
                 Log.d(TAG, "Program retrieved from arguments: " + program.toString());
                 populateUI(program);

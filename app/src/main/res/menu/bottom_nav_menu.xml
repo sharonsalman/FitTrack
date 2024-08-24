@@ -16,4 +16,8 @@
         android:id="@+id/goalsFragment"
         android:icon="@drawable/ic_goals"
         android:title="Goals" />
+    <item
+        android:id="@+id/settingsFragment"
+        android:icon="@drawable/ic_settings"
+        android:title="Settings" />
 </menu>

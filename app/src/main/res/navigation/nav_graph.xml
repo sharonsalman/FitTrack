@@ -144,6 +144,9 @@
         <action
             android:id="@+id/action_main_screen_fragment_to_programDetailsFragment"
             app:destination="@id/programDetailsFragment" />
+        <action
+            android:id="@+id/action_main_screen_fragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
 
     <fragment
@@ -179,5 +182,9 @@
             android:id="@+id/action_programDetailsFragment_to_main_screen_fragment"
             app:destination="@id/main_screen_fragment" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.sharonsalman.fittrack.mainscreen.SettingsFragment"
+        android:label="SettingsFragment" />
 
 </navigation>
