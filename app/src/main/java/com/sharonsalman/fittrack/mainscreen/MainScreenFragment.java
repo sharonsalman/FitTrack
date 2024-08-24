@@ -29,6 +29,16 @@ import com.sharonsalman.fittrack.Programs.FitnessProgram;
 import com.sharonsalman.fittrack.Programs.FitnessViewModel;
 import com.sharonsalman.fittrack.R;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
 import javax.sql.DataSource;
 
 public class MainScreenFragment extends Fragment {
@@ -37,6 +47,8 @@ public class MainScreenFragment extends Fragment {
     private TextView programNameTextView;
     private ImageView programImageView;
     private Button viewProgramDetailsButton;
+    private TextView greetingTextView;
+    private TextView nextWorkoutTextView;  // Add this line
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -54,6 +66,30 @@ public class MainScreenFragment extends Fragment {
         programNameTextView = view.findViewById(R.id.programNameTextView);
         programImageView = view.findViewById(R.id.programImageView);
         viewProgramDetailsButton = view.findViewById(R.id.selectprogram);
+        greetingTextView = view.findViewById(R.id.greetingTextView);
+        nextWorkoutTextView = view.findViewById(R.id.nextWorkoutTextView);  // Initialize the TextView
+
+        // Fetch the next workout date from Firebase
+        fetchNextWorkoutDate();
+
+        // Firebase Database Reference
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child("Ta1pSwXJ2BM9NbfdvtCRhVdDJqX2");
+
+        // Listening for changes in the user's data
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String name = dataSnapshot.child("name").getValue(String.class);
+                if (name != null) {
+                    greetingTextView.setText("Hello, " + name);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("MainScreenFragment", "Failed to read user name", databaseError.toException());
+            }
+        });
 
         fitnessViewModel.getSelectedProgram().observe(getViewLifecycleOwner(), program -> {
             Log.d("MainScreenFragment", "Observed program: " + program);
@@ -95,7 +131,7 @@ public class MainScreenFragment extends Fragment {
             }
         });
 
-// Create a custom OnNavigationItemSelectedListener
+        // Setup BottomNavigationView
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottom_navigation);
         NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
 
@@ -103,7 +139,7 @@ public class MainScreenFragment extends Fragment {
                 R.id.calendarFragment, R.id.fitnessProgramsFragment, R.id.trackFragment, R.id.goalsFragment, R.id.settingsFragment)
                 .build();
 
-// Create a custom OnNavigationItemSelectedListener
+        // Custom OnNavigationItemSelectedListener
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.calendarFragment) {
@@ -120,15 +156,50 @@ public class MainScreenFragment extends Fragment {
             } else if (itemId == R.id.fitnessProgramsFragment
                     || itemId == R.id.trackFragment
                     || itemId == R.id.goalsFragment
-                    || itemId == R.id.settingsFragment) {  // Add this line
+                    || itemId == R.id.settingsFragment) {
                 return NavigationUI.onNavDestinationSelected(item, navController);
             }
             return false;
         });
 
-
         NavigationUI.setupActionBarWithNavController((AppCompatActivity) requireActivity(), navController, appBarConfiguration);
 
         return view;
+    }
+
+    // Method to fetch the next workout date from Firebase
+    private void fetchNextWorkoutDate() {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        if (userId == null) return;
+
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId).child("program_dates");
+
+        userRef.orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                LocalDate today = LocalDate.now();
+                LocalDate nextWorkout = null;
+
+                for (DataSnapshot dateSnapshot : snapshot.getChildren()) {
+                    LocalDate date = LocalDate.parse(dateSnapshot.getKey());
+                    if (date.isAfter(today)) {
+                        nextWorkout = date;
+                        break;
+                    }
+                }
+
+                if (nextWorkout != null) {
+                    long daysUntilNextWorkout = ChronoUnit.DAYS.between(today, nextWorkout);
+                    nextWorkoutTextView.setText("Next Workout in " + daysUntilNextWorkout + " Days");
+                } else {
+                    nextWorkoutTextView.setText("No upcoming workouts");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("MainScreenFragment", "Error fetching next workout date", error.toException());
+            }
+        });
     }
 }

@@ -11,14 +11,19 @@
 
     <com.prolificinteractive.materialcalendarview.MaterialCalendarView
         android:id="@+id/material_calendar_view"
+        style="@style/CustomMaterialCalendarViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:mcv_showOtherDates="all"
-        app:mcv_selectionColor="@color/black" />
+        app:mcv_dateTextAppearance="@style/CustomDateTextAppearance1"
+        app:mcv_selectionColor="@color/black"
+        app:mcv_showOtherDates="all" />
+
 
     <Button
         android:id="@+id/add_to_calendar_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Program to Calendar" />
+        android:text="Add Program to Calendar"
+        style="@style/RoundedButtonStyle" />
+
 </LinearLayout>

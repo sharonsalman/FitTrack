@@ -11,4 +11,5 @@
     <color name="colorOnSecondary">#000000</color>
     <color name="backgroundColor">#F0F0F0</color>
     <color name="colorOnBackground">#000000</color>
+    <color name="calendarTextColor">#FF000000</color>
 </resources>

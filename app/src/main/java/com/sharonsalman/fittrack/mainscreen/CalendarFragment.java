@@ -220,15 +220,47 @@ public class CalendarFragment extends Fragment {
         LocalDate today = LocalDate.now();
         List<LocalDate> datesToSave = new ArrayList<>();
 
+        // Parse the frequency to determine the number of occurrences per week
+        int occurrencesPerWeek = parseFrequency(program.getFrequency());
+
         for (int i = 0; i < 7; i++) {
             LocalDate startDate = today.plusWeeks(i);
-            datesToSave.add(startDate);
-            addEventToDeviceCalendar(startDate, program.getName());
+            List<LocalDate> datesForWeek = generateRandomDatesForWeek(startDate, occurrencesPerWeek);
+            datesToSave.addAll(datesForWeek);
 
-            Log.d("CalendarFragment", "Added program to calendar: " + program.getName() + " on " + formatDate(startDate));
+            // Add events to the calendar
+            for (LocalDate date : datesForWeek) {
+                addEventToDeviceCalendar(date, program.getName());
+                Log.d("CalendarFragment", "Added program to calendar: " + program.getName() + " on " + formatDate(date));
+            }
         }
 
         saveProgramsToFirebase(program, datesToSave);
+    }
+
+    private int parseFrequency(String frequency) {
+        // Example parsing logic; adjust according to your frequency format
+        if (frequency.equals("1-2 days")) {
+            return (int) (Math.random() * 2) + 1; // Randomly 1 or 2 times
+        }
+        // Add other frequency parsing logic if needed
+        return 1; // Default to 1 occurrence if parsing fails
+    }
+
+    private List<LocalDate> generateRandomDatesForWeek(LocalDate startDate, int occurrences) {
+        List<LocalDate> dates = new ArrayList<>();
+        Set<LocalDate> chosenDates = new HashSet<>();
+        LocalDate endDate = startDate.plusDays(6);
+
+        while (chosenDates.size() < occurrences) {
+            LocalDate randomDate = startDate.plusDays((int) (Math.random() * 7));
+            if (!chosenDates.contains(randomDate) && !randomDate.isAfter(endDate)) {
+                chosenDates.add(randomDate);
+                dates.add(randomDate);
+            }
+        }
+
+        return dates;
     }
 
     private void displayEventsForDate(LocalDate date) {

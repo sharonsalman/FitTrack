@@ -9,18 +9,18 @@
         <!-- Primary color -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
-        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorOnPrimary">@android:color/black</item>
 
         <!-- Secondary color -->
         <item name="colorSecondary">@color/colorSecondary</item>
-        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
+        <item name="colorSecondaryVariant">@android:color/black</item>
         <item name="colorOnSecondary">@color/colorOnSecondary</item>
 
         <!-- Background color (this will be overridden by the image) -->
         <item name="colorOnBackground">@color/colorOnBackground</item>
 
         <!-- Surface color -->
-        <item name="colorSurface">@color/backgroundColor</item>
+        <item name="colorSurface">@android:color/black</item>
         <item name="colorOnSurface">@color/colorOnBackground</item>
 
         <!-- Error color -->
