@@ -16,6 +16,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class UserViewModel extends ViewModel {
@@ -42,21 +45,39 @@ public class UserViewModel extends ViewModel {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     try {
+                        // Retrieve data as strings
                         String workoutFrequency = getStringFromSnapshot(dataSnapshot.child("workoutFrequency"));
                         String fitnessLevel = getStringFromSnapshot(dataSnapshot.child("fitnessLevel"));
                         String workoutLocation = getStringFromSnapshot(dataSnapshot.child("workoutLocation"));
                         String goal = getStringFromSnapshot(dataSnapshot.child("goals"));
 
+                        // Retrieve data as floats
                         float currentWeight = getFloatFromSnapshot(dataSnapshot.child("currentWeight"));
                         float targetWeight = getFloatFromSnapshot(dataSnapshot.child("targetWeight"));
-                        Map<String, String> program_dates = (Map<String, String>) dataSnapshot.child("program_dates").getValue();
 
+                        Map<String, Map<String, User.ProgramDate>> program_dates = new HashMap<>();
+                        DataSnapshot programDatesSnapshot = dataSnapshot.child("program_dates");
+                        for (DataSnapshot dateSnapshot : programDatesSnapshot.getChildren()) {
+                            String date = dateSnapshot.getKey();
+                            Map<String, User.ProgramDate> innerMap = new HashMap<>();
+                            for (DataSnapshot programSnapshot : dateSnapshot.getChildren()) {
+                                String programId = programSnapshot.child("programId").getValue(String.class);
+                                String programName = programSnapshot.child("programName").getValue(String.class);
+                                User.ProgramDate programDate = new User.ProgramDate();
+                                programDate.programId = programId;
+                                programDate.programName = programName;
+                                innerMap.put(programSnapshot.getKey(), programDate);
+                            }
+                            program_dates.put(date, innerMap);
+                        }
+
+                        // Create and set the User object
                         User data = new User(firebaseUser.getEmail(), firebaseUser.getDisplayName(), "", 0,
                                 workoutFrequency, fitnessLevel, workoutLocation, goal,
-                                currentWeight, targetWeight, null, null);
+                                currentWeight, targetWeight, program_dates, null);
                         userFitnessData.setValue(data);
-                    } catch (DatabaseException e) {
-                        Log.e(TAG, "Error deserializing user fitness data", e);
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error processing user fitness data", e);
                     }
                 }
 

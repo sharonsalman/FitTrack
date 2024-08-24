@@ -14,7 +14,7 @@ public class User {
     private String goal;
     private float currentWeight;
     private float targetWeight;
-    private List<String> program_dates;
+    private Map<String, Map<String, ProgramDate>> program_dates;
     private String selectedProgram;
 
     // Empty constructor needed for Firebase
@@ -22,7 +22,7 @@ public class User {
 
     // Constructor with parameters
     public User(String email, String name, String password, int age, String workoutFrequency, String fitnessLevel,
-                String workoutLocation, String goal, float currentWeight, float targetWeight, List<String> program_dates, String selectedProgram) {
+                String workoutLocation, String goal, float currentWeight, float targetWeight, Map<String, Map<String, ProgramDate>> program_dates, String selectedProgram) {
         this.email = email;
         this.name = name;
         this.password = password;
@@ -88,9 +88,16 @@ public class User {
     public float getTargetWeight() { return targetWeight; }
     public void setTargetWeight(float targetWeight) { this.targetWeight = targetWeight; }
 
-    public List<String> getProgram_dates() { return program_dates; }
-    public void setProgram_dates(List<String> program_dates) { this.program_dates = program_dates; }
+    public Map<String, Map<String, ProgramDate>> getProgram_dates() { return program_dates; }
+    public void setProgram_dates(Map<String, Map<String, ProgramDate>> program_dates) { this.program_dates = program_dates; }
 
     public String getSelectedProgram() { return selectedProgram; }
     public void setSelectedProgram(String selectedProgram) { this.selectedProgram = selectedProgram; }
+
+    public static class ProgramDate {
+        public String programId;
+        public String programName;
+
+        // Constructor, getters, and setters
+    }
 }
