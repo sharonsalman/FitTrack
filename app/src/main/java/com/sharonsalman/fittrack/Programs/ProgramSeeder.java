@@ -97,7 +97,7 @@ public class ProgramSeeder {
     private static List<FitnessProgram> getPrograms() {
         List<FitnessProgram> programs = new ArrayList<>();
 
-        FitnessProgram program = new FitnessProgram(
+        programs.add(new FitnessProgram(
                 "1",
                 "Home Workout for Beginners - 2 Times a Week",
                 "A gentle introduction to fitness with exercises you can do at home.",
@@ -122,7 +122,8 @@ public class ProgramSeeder {
                 "1-2 times a week",
                 "Beginner",
                 "https://img.freepik.com/premium-photo/woman-doing-fitness-training-home-walking-high-knees_926199-2153476.jpg"
-        );
+        ));
+
         programs.add(new FitnessProgram(
                 "2",
                 "Gym Workout for Intermediate - 4 Times a Week",
