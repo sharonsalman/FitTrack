@@ -16,6 +16,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Map;
+
 public class UserViewModel extends ViewModel {
     private static final String TAG = "UserViewModel";
     private final MutableLiveData<User> userFitnessData = new MutableLiveData<>();
@@ -47,6 +49,7 @@ public class UserViewModel extends ViewModel {
 
                         float currentWeight = getFloatFromSnapshot(dataSnapshot.child("currentWeight"));
                         float targetWeight = getFloatFromSnapshot(dataSnapshot.child("targetWeight"));
+                        Map<String, String> program_dates = (Map<String, String>) dataSnapshot.child("program_dates").getValue();
 
                         User data = new User(firebaseUser.getEmail(), firebaseUser.getDisplayName(), "", 0,
                                 workoutFrequency, fitnessLevel, workoutLocation, goal,

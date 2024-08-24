@@ -152,11 +152,16 @@ public class FitnessViewModel extends ViewModel {
         }
 
         List<FitnessProgram> filteredList = new ArrayList<>();
+        String workoutTypeLower = workoutType.toLowerCase().trim();
+        String frequencyLower = frequency.toLowerCase().trim();
+        String difficultyLower = difficulty.toLowerCase().trim();
+
         for (FitnessProgram program : allPrograms) {
-            boolean matchesWorkoutType = workoutType.equals("All") || program.getWorkoutType().toLowerCase().contains(workoutType.toLowerCase());
-            boolean matchesFrequency = frequency.equals("All") || program.getFrequency().equalsIgnoreCase(frequency);
-            boolean matchesDifficulty = difficulty.equals("All") || program.getDifficulty().equalsIgnoreCase(difficulty);
-            Log.d("FitnessViewModel", "Comparing - Program: " + program.getWorkoutType() + ", Filter: " + workoutType + ", Match: " + matchesWorkoutType);
+            String programWorkoutType = program.getWorkoutType().toLowerCase().trim();
+            boolean matchesWorkoutType = workoutTypeLower.equals("all") || programWorkoutType.contains(workoutTypeLower);
+            boolean matchesFrequency = frequencyLower.equals("all") || program.getFrequency().toLowerCase().trim().equals(frequencyLower);
+            boolean matchesDifficulty = difficultyLower.equals("all") || program.getDifficulty().toLowerCase().trim().equals(difficultyLower);
+
             if (matchesWorkoutType && matchesFrequency && matchesDifficulty) {
                 filteredList.add(program);
             }
@@ -165,6 +170,7 @@ public class FitnessViewModel extends ViewModel {
         Log.d("FitnessViewModel", "Filtered programs count: " + filteredList.size());
         filteredPrograms.setValue(filteredList);
     }
+
 
     public List<FitnessProgram> getFilteredPrograms(String workoutType, String frequency, String difficulty) {
         List<FitnessProgram> filteredPrograms = new ArrayList<>();

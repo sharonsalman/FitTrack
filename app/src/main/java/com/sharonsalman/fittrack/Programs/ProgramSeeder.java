@@ -311,6 +311,217 @@ public class ProgramSeeder {
                 "Intermediate",
                 "https://www.muscleandfitness.com/wp-content/uploads/2018/09/MANUP3.jpg?quality=86&strip=all"
         ));
+                programs.add(new FitnessProgram(
+                        "11",
+                        "Home Bodyweight Circuit - 4 Times a Week",
+                        "A circuit-based bodyweight workout designed for home use.",
+                        Arrays.asList("Burpees", "Squats", "Lunges", "Push-ups", "Plank"),
+                        Arrays.asList(
+                                "Start in a standing position, drop to a squat, kick feet back, perform a push-up, return to squat, and jump up.",
+                                "Stand with feet shoulder-width apart, perform a squat by sending hips back and down, then stand back up.",
+                                "Step forward with one leg, lowering hips until both knees are bent at 90-degree angles, then return to start.",
+                                "Perform push-ups with your body in a straight line from head to heels.",
+                                "Hold a plank position with your body in a straight line from head to heels."
+                        ),
+                        Arrays.asList("Cardio", "Strength", "Strength", "Strength", "Core"),
+                        Arrays.asList(4, 3, 3, 3, 3),
+                        Arrays.asList(30, 30, 30, 15, 60),
+                        "Home workout",
+                        "4-5 times a week",
+                        "Intermediate",
+                        "https://cdn.pixabay.com/photo/2015/06/19/21/21/exercise-815579_960_720.jpg"
+                ));
+
+        programs.add(new FitnessProgram(
+                "12",
+                "Gym Powerlifting Basics - 3 Times a Week",
+                "Introduction to powerlifting with basic strength exercises.",
+                Arrays.asList("Squats", "Bench press", "Deadlifts", "Overhead press", "Barbell rows"),
+                Arrays.asList(
+                        "Perform squats with a barbell on your shoulders, keeping your back straight.",
+                        "Lie on a bench and press a barbell upward until arms are extended.",
+                        "Lift a barbell from the ground to hip level while keeping your back straight.",
+                        "Press a barbell overhead from shoulder height.",
+                        "Pull a barbell towards your torso while bent over."
+                ),
+                Arrays.asList("Strength", "Strength", "Strength", "Strength", "Strength"),
+                Arrays.asList(4, 4, 4, 3, 4),
+                Arrays.asList(6, 6, 6, 8, 8),
+                "Gym workout",
+                "3-4 times a week",
+                "Intermediate",
+                "https://cdn.pixabay.com/photo/2016/11/30/18/16/barbell-1873425_960_720.jpg"
+        ));
+
+        programs.add(new FitnessProgram(
+                "13",
+                "Home Cardio Kickboxing - 5 Times a Week",
+                "Cardio kickboxing workout to boost fitness and endurance.",
+                Arrays.asList("Jab-cross", "Front kicks", "Side kicks", "Roundhouse kicks", "Jumping jacks"),
+                Arrays.asList(
+                        "Throw a jab with your lead hand followed by a cross with your rear hand.",
+                        "Kick forward with one leg while keeping the other leg stable.",
+                        "Kick out to the side with one leg while keeping the other leg stable.",
+                        "Kick in a circular motion with one leg while keeping the other leg stable.",
+                        "Jump with feet wide and arms overhead, then return to start."
+                ),
+                Arrays.asList("Cardio", "Cardio", "Cardio", "Cardio", "Cardio"),
+                Arrays.asList(4, 4, 4, 4, 4),
+                Arrays.asList(30, 30, 30, 30, 30),
+                "Home workout",
+                "4-5- times a week",
+                "Intermediate",
+                "https://cdn.pixabay.com/photo/2016/11/30/21/51/boxing-1872364_960_720.jpg"
+        ));
+
+        programs.add(new FitnessProgram(
+                "14",
+                "Gym CrossFit Basics - 4 Times a Week",
+                "Introduction to CrossFit with functional fitness exercises.",
+                Arrays.asList("Wall balls", "Kettlebell swings", "Box jumps", "Burpees", "Rowing"),
+                Arrays.asList(
+                        "Throw a medicine ball against a wall and catch it on the rebound.",
+                        "Swing a kettlebell from between your legs to shoulder height.",
+                        "Jump onto a box or platform with both feet.",
+                        "Perform a full-body exercise starting from a squat to a jump.",
+                        "Row using a rowing machine with moderate resistance."
+                ),
+                Arrays.asList("Strength", "Strength", "Cardio", "Cardio", "Cardio"),
+                Arrays.asList(3, 3, 4, 4, 4),
+                Arrays.asList(15, 20, 20, 10, 20),
+                "Gym workout",
+                "4-5 times a week",
+                "Advanced",
+                "https://cdn.pixabay.com/photo/2017/08/06/16/48/fitness-2586360_960_720.jpg"
+        ));
+
+        programs.add(new FitnessProgram(
+                "15",
+                "Home Pilates for Core - 3 Times a Week",
+                "Pilates exercises focusing on core strength and flexibility.",
+                Arrays.asList("The Hundred", "Roll-up", "Leg circles", "Plank", "Saw"),
+                Arrays.asList(
+                        "Lie on your back with legs extended and perform small pulses with arms.",
+                        "Lie on your back, lift your head and shoulders off the ground, and roll up.",
+                        "Lie on your back with legs extended, draw circles with your legs.",
+                        "Hold a plank position with your body in a straight line from head to heels.",
+                        "Sit with legs extended, reach for feet while twisting torso."
+                ),
+                Arrays.asList("Core", "Core", "Core", "Core", "Core"),
+                Arrays.asList(3, 3, 3, 3, 3),
+                Arrays.asList(30, 30, 30, 60, 30),
+                "Home workout",
+                "3-4 times a week",
+                "Beginner",
+                "https://cdn.pixabay.com/photo/2015/09/06/22/54/pilates-925821_960_720.jpg"
+        ));
+
+        programs.add(new FitnessProgram(
+                "16",
+                "Gym Functional Training - 4 Times a Week",
+                "Functional training exercises to improve overall fitness and mobility.",
+                Arrays.asList("Medicine ball slams", "TRX rows", "Kettlebell goblet squats", "Battle ropes", "Sled pushes"),
+                Arrays.asList(
+                        "Lift a medicine ball overhead and slam it down to the ground.",
+                        "Perform rows using TRX straps while keeping your body straight.",
+                        "Hold a kettlebell close to your chest and perform squats.",
+                        "Wave battle ropes up and down with both arms.",
+                        "Push a weighted sled across the floor."
+                ),
+                Arrays.asList("Cardio", "Strength", "Strength", "Cardio", "Strength"),
+                Arrays.asList(4, 3, 3, 4, 4),
+                Arrays.asList(30, 20, 15, 30, 30),
+                "Gym workout",
+                "4-5 times a week",
+                "Intermediate",
+                "https://cdn.pixabay.com/photo/2015/09/18/16/45/gym-942296_960_720.jpg"
+        ));
+
+        programs.add(new FitnessProgram(
+                "17",
+                "Home Strength Endurance - 3 Times a Week",
+                "Endurance-focused strength workout for home use.",
+                Arrays.asList("Push-up variations", "Squat pulses", "Lunge jumps", "Mountain climbers", "Plank holds"),
+                Arrays.asList(
+                        "Perform various push-up styles, such as diamond or wide.",
+                        "Hold a squat position with small pulses up and down.",
+                        "Jump from one leg to another in a lunge position.",
+                        "Alternate bringing knees to chest while in a plank position.",
+                        "Hold a plank position for extended periods."
+                ),
+                Arrays.asList("Strength", "Strength", "Strength", "Cardio", "Core"),
+                Arrays.asList(3, 3, 3, 4, 4),
+                Arrays.asList(15, 30, 30, 30, 60),
+                "Home workout",
+                "3-4 times a week",
+                "Intermediate",
+                "https://cdn.pixabay.com/photo/2015/05/07/15/45/fitness-752709_960_720.jpg"
+        ));
+
+        programs.add(new FitnessProgram(
+                "18",
+                "Gym High-Intensity Strength - 5 Times a Week",
+                "High-intensity strength workout focusing on muscle gain.",
+                Arrays.asList("Deadlifts", "Bench press", "Squat jumps", "Pull-ups", "Overhead press"),
+                Arrays.asList(
+                        "Lift a barbell from the ground to hip level while keeping your back straight.",
+                        "Lie on a bench and press a barbell upward until arms are extended.",
+                        "Perform squats followed by an explosive jump.",
+                        "Hang from a bar and pull your body up until your chin is above the bar.",
+                        "Press a barbell overhead from shoulder height."
+                ),
+                Arrays.asList("Strength", "Strength", "Strength", "Strength", "Strength"),
+                Arrays.asList(5, 5, 4, 4, 4),
+                Arrays.asList(6, 6, 10, 10, 10),
+                "Gym workout",
+                "4-5 times a week",
+                "Advanced",
+                "https://cdn.pixabay.com/photo/2016/11/29/03/11/dumbbell-1867304_960_720.jpg"
+        ));
+
+        programs.add(new FitnessProgram(
+                "19",
+                "Home Yoga Flexibility - 4 Times a Week",
+                "Yoga routine focused on improving flexibility and relaxation.",
+                Arrays.asList("Downward Dog", "Warrior Pose", "Tree Pose", "Seated Forward Bend", "Child's Pose"),
+                Arrays.asList(
+                        "Start on all fours, lift hips to form an inverted V-shape, and stretch arms and legs.",
+                        "Step one foot forward and extend the other leg back, arms extended overhead.",
+                        "Stand on one leg, place the foot of the other leg on your inner thigh, and balance.",
+                        "Sit with legs extended and reach for your toes, stretching your back.",
+                        "Kneel and sit back on your heels, extending your arms forward and lowering your torso."
+                ),
+                Arrays.asList("Flexibility", "Flexibility", "Flexibility", "Flexibility", "Flexibility"),
+                Arrays.asList(4, 4, 4, 4, 4),
+                Arrays.asList(60, 60, 60, 60, 60),
+                "Home workout",
+                "4-5 times a week",
+                "Beginner",
+                "https://cdn.pixabay.com/photo/2015/09/14/19/56/yoga-940544_960_720.jpg"
+        ));
+
+        programs.add(new FitnessProgram(
+                "20",
+                "Gym Total Body Conditioning - 5 Times a Week",
+                "Comprehensive workout focusing on all major muscle groups.",
+                Arrays.asList("Circuit training", "Cardio intervals", "Strength training", "Core work", "Cool down"),
+                Arrays.asList(
+                        "Perform a series of exercises targeting different muscle groups in a circuit format.",
+                        "Alternate between high-intensity cardio exercises and recovery periods.",
+                        "Include exercises for all major muscle groups with moderate to heavy weights.",
+                        "Focus on exercises that target core muscles, such as planks and Russian twists.",
+                        "Perform light stretching and breathing exercises to cool down."
+                ),
+                Arrays.asList("Strength", "Cardio", "Strength", "Core", "Flexibility"),
+                Arrays.asList(4, 4, 4, 3, 3),
+                Arrays.asList(30, 30, 30, 15, 15),
+                "Gym workout",
+                "4-5 times a week",
+                "Advanced",
+                "https://cdn.pixabay.com/photo/2016/12/15/21/47/weight-1907524_960_720.jpg"
+        ));
+
+
 
         return programs;
     }

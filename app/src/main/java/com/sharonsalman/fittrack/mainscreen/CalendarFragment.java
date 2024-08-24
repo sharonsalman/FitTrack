@@ -143,7 +143,6 @@ public class CalendarFragment extends Fragment {
         String programId = programsReference.push().getKey();
         Map<String, Object> programData = new HashMap<>();
         programData.put("name", program.getName());
-        programData.put("frequency", program.getFrequency());
 
         programsReference.child(programId).setValue(programData)
                 .addOnCompleteListener(task -> {

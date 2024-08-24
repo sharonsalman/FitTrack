@@ -122,9 +122,9 @@ public class FitnessProgramsFragment extends Fragment implements FitnessProgramA
 
     private String mapWorkoutLocation(String location) {
         switch (location.toLowerCase()) {
-            case "home":
+            case "home workout":
                 return "Home";
-            case "gym":
+            case "gym workout":
                 return "Gym";
             default:
                 return "All";
