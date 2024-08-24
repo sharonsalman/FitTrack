@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sharonsalman.fittrack.R;
-import com.sharonsalman.fittrack.UserData;
+import com.sharonsalman.fittrack.User;
 
 public class FitnessProgramsFragment extends Fragment implements FitnessProgramAdapter.OnProgramSelectedListener {
 
@@ -109,15 +109,16 @@ public class FitnessProgramsFragment extends Fragment implements FitnessProgramA
         fitnessViewModel.fetchUserData();
         fitnessViewModel.getUserData().observe(getViewLifecycleOwner(), this::applyUserData);
     }
-
-    private void applyUserData(UserData userData) {
-        if (userData != null) {
-            setSpinnerToValue(workoutTypeSpinner, mapWorkoutLocation(userData.getWorkoutLocation()));
-            setSpinnerToValue(frequencySpinner, mapWorkoutFrequency(userData.getWorkoutFrequency()));
-            setSpinnerToValue(difficultySpinner, mapFitnessLevel(userData.getFitnessLevel()));
+    private void applyUserData(User user) {
+        if (user != null) {
+            setSpinnerSelection(workoutTypeSpinner, R.array.workout_location, user.getWorkoutLocation());
+            setSpinnerSelection(frequencySpinner, R.array.workout_frequency, user.getWorkoutFrequency());
+            setSpinnerSelection(difficultySpinner, R.array.fitness_level, user.getFitnessLevel());
             applyFilters();
         }
     }
+
+
 
     private String mapWorkoutLocation(String location) {
         switch (location.toLowerCase()) {
@@ -130,11 +131,19 @@ public class FitnessProgramsFragment extends Fragment implements FitnessProgramA
         }
     }
 
-    private String mapWorkoutFrequency(int frequency) {
-        if (frequency == 2) return "1-2 times a week";
-        else if (frequency == 3) return "2-3 times a week";
-        else return "4-5 times a week";
+    private int mapWorkoutFrequency(String frequency) {
+        switch (frequency.toLowerCase()) {
+            case "1-2 times a week":
+                return 2;
+            case "2-3 times a week":
+                return 3;
+            case "4-5 times a week":
+                return 4;
+            default:
+                return 0;
+        }
     }
+
 
 
     private String mapFitnessLevel(String level) {
@@ -157,6 +166,18 @@ public class FitnessProgramsFragment extends Fragment implements FitnessProgramA
             spinner.setSelection(position);
         }
     }
+    private void setSpinnerSelection(Spinner spinner, int arrayResId, String value) {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                arrayResId, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        int position = adapter.getPosition(value);
+        if (position >= 0) {
+            spinner.setSelection(position);
+        }
+    }
+
 
     private void applyFilters() {
         String workoutType = workoutTypeSpinner.getSelectedItem().toString();

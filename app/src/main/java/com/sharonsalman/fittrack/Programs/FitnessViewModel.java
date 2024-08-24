@@ -15,7 +15,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sharonsalman.fittrack.User;
-import com.sharonsalman.fittrack.UserData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +25,6 @@ public class FitnessViewModel extends ViewModel {
     private final MutableLiveData<List<FitnessProgram>> fitnessPrograms = new MutableLiveData<>();
     private final MutableLiveData<List<FitnessProgram>> filteredPrograms = new MutableLiveData<>();
     private final MutableLiveData<FitnessProgram> selectedProgram = new MutableLiveData<>();
-    private final MutableLiveData<UserData> userData = new MutableLiveData<>();
     private final MutableLiveData<User> user = new MutableLiveData<>();
     private final DatabaseReference reference;
     private List<FitnessProgram> programs = new ArrayList<>();
@@ -188,8 +186,8 @@ public class FitnessViewModel extends ViewModel {
         return filteredPrograms;
     }
 
-    public LiveData<UserData> getUserData() {
-        return userData;
+    public LiveData<User> getUserData() {
+        return user;
     }
 
     public LiveData<User> getUser() {
@@ -221,9 +219,9 @@ public class FitnessViewModel extends ViewModel {
             userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    UserData data = dataSnapshot.getValue(UserData.class);
+                    User data = dataSnapshot.getValue(User.class);
                     if (data != null) {
-                        userData.setValue(data);
+                        user.setValue(data);
                         Log.d(TAG, "User data fetched successfully");
                     } else {
                         Log.d(TAG, "No data found for the user");

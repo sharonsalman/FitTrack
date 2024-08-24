@@ -35,8 +35,7 @@ public class workout_frequency_fragment extends Fragment {
         // Handle button click
         binding.nextButton.setOnClickListener(v -> {
             String selectedFrequency = (String) workoutFrequencySpinner.getSelectedItem();
-            int frequencyValue = parseFrequency(selectedFrequency);
-            sharedViewModel.setWorkoutFrequency(frequencyValue);
+            sharedViewModel.setWorkoutFrequency(selectedFrequency);
             Navigation.findNavController(v).navigate(R.id.action_workoutFrequencyFragment_to_fitnessLevelFragment);
         });
 
@@ -45,13 +44,5 @@ public class workout_frequency_fragment extends Fragment {
         });
 
         return binding.getRoot();
-
     }
-    private int parseFrequency(String frequency) {
-        if (frequency.contains("1-2 times a week")) return 2;
-        if (frequency.contains("2-3 times a week")) return 3;
-        if (frequency.contains("4-5 times a week")) return 4;
-        return 0; // Default value if none of the cases match
-    }
-
 }

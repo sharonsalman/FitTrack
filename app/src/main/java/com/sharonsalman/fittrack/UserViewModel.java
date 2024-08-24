@@ -16,11 +16,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.Map;
-
 public class UserViewModel extends ViewModel {
     private static final String TAG = "UserViewModel";
-    private final MutableLiveData<UserFitnessData> userFitnessData = new MutableLiveData<>();
+    private final MutableLiveData<User> userFitnessData = new MutableLiveData<>();
     private final DatabaseReference reference;
 
     public UserViewModel() {
@@ -29,7 +27,7 @@ public class UserViewModel extends ViewModel {
         fetchUserData();
     }
 
-    public LiveData<UserFitnessData> getUserFitnessData() {
+    public LiveData<User> getUserFitnessData() {
         return userFitnessData;
     }
 
@@ -37,22 +35,22 @@ public class UserViewModel extends ViewModel {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (firebaseUser != null) {
-            String uid = firebaseUser.getUid(); // Use UID for fetching data
+            String uid = firebaseUser.getUid();
             reference.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     try {
-                        // Extract and handle String fields
                         String workoutFrequency = getStringFromSnapshot(dataSnapshot.child("workoutFrequency"));
                         String fitnessLevel = getStringFromSnapshot(dataSnapshot.child("fitnessLevel"));
                         String workoutLocation = getStringFromSnapshot(dataSnapshot.child("workoutLocation"));
                         String goal = getStringFromSnapshot(dataSnapshot.child("goals"));
 
-                        // Handle conversion for Long and Double
                         float currentWeight = getFloatFromSnapshot(dataSnapshot.child("currentWeight"));
                         float targetWeight = getFloatFromSnapshot(dataSnapshot.child("targetWeight"));
 
-                        UserFitnessData data = new UserFitnessData(workoutFrequency, fitnessLevel, workoutLocation, goal, currentWeight, targetWeight);
+                        User data = new User(firebaseUser.getEmail(), firebaseUser.getDisplayName(), "", 0,
+                                workoutFrequency, fitnessLevel, workoutLocation, goal,
+                                currentWeight, targetWeight, null, null);
                         userFitnessData.setValue(data);
                     } catch (DatabaseException e) {
                         Log.e(TAG, "Error deserializing user fitness data", e);
@@ -69,8 +67,6 @@ public class UserViewModel extends ViewModel {
         }
     }
 
-
-    // Helper method to get String from DataSnapshot
     private String getStringFromSnapshot(DataSnapshot snapshot) {
         Object value = snapshot.getValue();
         if (value instanceof String) {
@@ -84,7 +80,6 @@ public class UserViewModel extends ViewModel {
         }
     }
 
-    // Helper method to get Float from DataSnapshot
     private float getFloatFromSnapshot(DataSnapshot snapshot) {
         Object value = snapshot.getValue();
         if (value instanceof Long) {
@@ -99,21 +94,18 @@ public class UserViewModel extends ViewModel {
                 return 0.0f;
             }
         } else {
-            return 0.0f; // Default value or handle as appropriate
+            return 0.0f;
         }
     }
 
-    public void updateUserFitnessData(Map<String, Object> updates) {
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser = auth.getCurrentUser();
+    public void updateUserFitnessData(User updatedFitnessData) {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null) {
-            String userId = firebaseUser.getUid();
-            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
-            userRef.updateChildren(updates)
-                    .addOnSuccessListener(aVoid -> Log.d(TAG, "User fitness data successfully updated"))
-                    .addOnFailureListener(e -> Log.e(TAG, "Failed to update user fitness data", e));
+            String uid = firebaseUser.getUid(); // Use UID for updating data
+            reference.child(uid).setValue(updatedFitnessData)
+                    .addOnSuccessListener(aVoid -> Log.d(TAG, "User fitness data updated successfully"))
+                    .addOnFailureListener(e -> Log.e(TAG, "Error updating user fitness data", e));
         }
     }
-
 
 }

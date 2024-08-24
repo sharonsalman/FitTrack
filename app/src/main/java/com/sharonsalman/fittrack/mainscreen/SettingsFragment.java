@@ -17,9 +17,14 @@ import android.widget.Spinner;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.sharonsalman.fittrack.R;
-import com.sharonsalman.fittrack.UserFitnessData;
 import com.sharonsalman.fittrack.UserViewModel;
+import com.sharonsalman.fittrack.User;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -73,8 +78,6 @@ public class SettingsFragment extends Fragment {
             Log.d(TAG, "loadUserData: Observer triggered");
             if (userFitnessData != null) {
                 Log.d(TAG, "loadUserData: User fitness data loaded: " + userFitnessData.toString());
-
-                // Setting spinner selections based on the user data from Firebase
                 setSpinnerSelection(fitnessLevelSpinner, R.array.fitness_level, userFitnessData.getFitnessLevel());
                 setSpinnerSelection(goalSpinner, R.array.goal, userFitnessData.getGoal());
                 targetWeightEdit.setText(String.valueOf(userFitnessData.getTargetWeight()));
@@ -86,68 +89,82 @@ public class SettingsFragment extends Fragment {
         });
     }
 
-    private void setSpinnerSelection(Spinner spinner, int arrayResourceId, String value) {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                arrayResourceId, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-
-        if (value != null) {
-            int spinnerPosition = adapter.getPosition(value);
-
-            // Check if the value exists in the spinner's adapter
-            if (spinnerPosition >= 0) {
-                spinner.setSelection(spinnerPosition);
-            } else {
-                Log.e(TAG, "setSpinnerSelection: Value not found in spinner adapter - " + value);
-            }
-        }
-    }
-
-
     private void saveUserData() {
         Log.d(TAG, "saveUserData: Saving user data");
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = auth.getCurrentUser();
 
         if (firebaseUser != null) {
-            Log.d(TAG, "Authenticated User ID: " + firebaseUser.getUid());
+            String userId = firebaseUser.getUid();
+            Log.d(TAG, "Authenticated User ID: " + userId);
 
-            UserFitnessData currentUserFitnessData = userViewModel.getUserFitnessData().getValue();
-            Log.d(TAG, "saveUserData: Current user fitness data: " + currentUserFitnessData);
+            // Reference to the user data in Firebase
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
 
-            if (currentUserFitnessData != null) {
-                String fitnessLevel = fitnessLevelSpinner.getSelectedItem().toString();
-                String goal = goalSpinner.getSelectedItem().toString();
-                String workoutFrequency = workoutFrequencySpinner.getSelectedItem().toString();
-                String workoutLocation = workoutLocationSpinner.getSelectedItem().toString();
-                float targetWeight = currentUserFitnessData.getTargetWeight();
+            // Fetch existing data
+            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    User currentUserFitnessData = dataSnapshot.getValue(User.class);
 
-                String targetWeightInput = targetWeightEdit.getText().toString().trim();
-                if (!targetWeightInput.isEmpty()) {
-                    try {
-                        targetWeight = Float.parseFloat(targetWeightInput);
-                    } catch (NumberFormatException e) {
-                        Log.e(TAG, "saveUserData: Invalid target weight format", e);
+                    if (currentUserFitnessData != null) {
+                        Log.d(TAG, "Current user fitness data: " + currentUserFitnessData);
+
+                        // Get updated values
+                        String fitnessLevel = fitnessLevelSpinner.getSelectedItem().toString();
+                        String goal = goalSpinner.getSelectedItem().toString();
+                        String workoutFrequency = workoutFrequencySpinner.getSelectedItem().toString();
+                        String workoutLocation = workoutLocationSpinner.getSelectedItem().toString();
+                        float targetWeight = currentUserFitnessData.getTargetWeight(); // Default to existing value
+
+                        String targetWeightInput = targetWeightEdit.getText().toString().trim();
+                        if (!targetWeightInput.isEmpty()) {
+                            try {
+                                targetWeight = Float.parseFloat(targetWeightInput);
+                            } catch (NumberFormatException e) {
+                                Log.e(TAG, "Invalid target weight format", e);
+                            }
+                        }
+
+                        // Create a map for the updated values
+                        Map<String, Object> updates = new HashMap<>();
+                        updates.put("fitnessLevel", fitnessLevel);
+                        updates.put("goals", goal);
+                        updates.put("workoutFrequency", workoutFrequency);
+                        updates.put("workoutLocation", workoutLocation);
+                        updates.put("targetWeight", targetWeight);
+
+                        // Update only the specified fields
+                        userRef.updateChildren(updates).addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Log.d(TAG, "User data updated successfully");
+                            } else {
+                                Log.e(TAG, "Error updating user data", task.getException());
+                            }
+                        });
+                    } else {
+                        Log.e(TAG, "UserFitnessData object is null");
                     }
                 }
 
-                // Create a map of fields to update
-                Map<String, Object> updates = new HashMap<>();
-                updates.put("fitnessLevel", fitnessLevel);
-                updates.put("goals", goal);
-                updates.put("workoutFrequency", workoutFrequency);
-                updates.put("workoutLocation", workoutLocation);
-                updates.put("targetWeight", targetWeight);
-
-                // Perform the update
-                userViewModel.updateUserFitnessData(updates);
-
-            } else {
-                Log.e(TAG, "saveUserData: No user fitness data available");
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.e(TAG, "Error fetching user data", databaseError.toException());
+                }
+            });
         } else {
             Log.e(TAG, "No authenticated user found");
+        }
+    }
+
+    private void setSpinnerSelection(Spinner spinner, int arrayResourceId, String value) {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                arrayResourceId, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        if (value != null) {
+            int spinnerPosition = adapter.getPosition(value);
+            spinner.setSelection(spinnerPosition);
         }
     }
 }

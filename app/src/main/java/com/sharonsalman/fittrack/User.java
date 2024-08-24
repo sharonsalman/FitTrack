@@ -36,7 +36,27 @@ public class User {
         this.selectedProgram = selectedProgram;
     }
 
-    // Getters and setters
+    public User(String fitnessLevel, String goal, String workoutFrequency, String workoutLocation, float targetWeight) {
+        this.fitnessLevel = fitnessLevel;
+        this.goal = goal;
+        this.workoutFrequency = workoutFrequency;
+        this.workoutLocation = workoutLocation;
+        this.targetWeight = targetWeight;
+    }
+    public User(String fitnessLevel,String workoutFrequency,String workoutLocation){
+        this.fitnessLevel = fitnessLevel;
+        this.workoutFrequency = workoutFrequency;
+        this.workoutLocation = workoutLocation;
+    }
+    public User(String workoutFrequency, String fitnessLevel, String workoutLocation, String goal, float currentWeight, float targetWeight){
+        this.workoutFrequency = workoutFrequency;
+        this.fitnessLevel = fitnessLevel;
+        this.workoutLocation = workoutLocation;
+        this.goal = goal;
+        this.currentWeight = currentWeight;
+        this.targetWeight = targetWeight;
+    }
+
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 

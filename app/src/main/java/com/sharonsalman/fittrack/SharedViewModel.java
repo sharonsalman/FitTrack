@@ -40,7 +40,7 @@ public class SharedViewModel extends AndroidViewModel {
     private final MutableLiveData<String> name = new MutableLiveData<>();
     private final MutableLiveData<String> password = new MutableLiveData<>();
     private final MutableLiveData<Integer> age = new MutableLiveData<>();
-    private final MutableLiveData<Integer> workoutFrequency = new MutableLiveData<>();
+    private final MutableLiveData<String> workoutFrequency = new MutableLiveData<>();
     private final MutableLiveData<String> fitnessLevel = new MutableLiveData<>();
     private final MutableLiveData<String> workoutLocation = new MutableLiveData<>();
     private final MutableLiveData<String> goals = new MutableLiveData<>();
@@ -60,7 +60,7 @@ public class SharedViewModel extends AndroidViewModel {
         name.setValue(sharedPreferences.getString(NAME_KEY, ""));
         password.setValue(sharedPreferences.getString(PASSWORD_KEY, ""));
         age.setValue(sharedPreferences.getInt(AGE_KEY, 0));
-        workoutFrequency.setValue(sharedPreferences.getInt(WORKOUT_FREQUENCY_KEY, 0));
+        workoutFrequency.setValue(sharedPreferences.getString(WORKOUT_FREQUENCY_KEY, ""));
         fitnessLevel.setValue(sharedPreferences.getString(FITNESS_LEVEL_KEY, ""));
         workoutLocation.setValue(sharedPreferences.getString(WORKOUT_LOCATION_KEY, "Home"));
         goals.setValue(sharedPreferences.getString(GOALS_KEY, ""));
@@ -137,11 +137,13 @@ public class SharedViewModel extends AndroidViewModel {
         savePreference(AGE_KEY, age);
     }
 
-    public MutableLiveData<Integer> getWorkoutFrequency() { return workoutFrequency; }
-    public void setWorkoutFrequency(Integer workoutFrequency) {
+
+    public MutableLiveData<String> getWorkoutFrequency() { return workoutFrequency; }
+    public void setWorkoutFrequency(String workoutFrequency) {
         this.workoutFrequency.setValue(workoutFrequency);
         savePreference(WORKOUT_FREQUENCY_KEY, workoutFrequency);
     }
+
 
     public MutableLiveData<String> getFitnessLevel() { return fitnessLevel; }
     public void setFitnessLevel(String fitnessLevel) {
@@ -199,7 +201,7 @@ public class SharedViewModel extends AndroidViewModel {
     public void saveDataToFirebase(OnSaveCompleteListener listener) {
         String nameValue = name.getValue();
         Integer ageValue = age.getValue();
-        Integer workoutFrequencyValue = workoutFrequency.getValue();
+        String workoutFrequencyValue = workoutFrequency.getValue();
         String fitnessLevelValue = fitnessLevel.getValue();
         String workoutLocationValue = workoutLocation.getValue();
         String goalsValue = goals.getValue();
