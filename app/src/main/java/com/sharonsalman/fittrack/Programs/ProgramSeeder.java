@@ -142,7 +142,7 @@ public class ProgramSeeder {
                 "Gym workout",
                 "4-5 times a week",
                 "Intermediate",
-                "https://cdn.shopify.com/s/files/1/0162/2116/files/people-2604149_1280_cd93e663-dd4a-47c5-b92c-189c1645b326.jpg?v=1576756194"
+                "https://www.coinstreet.org/sites/default/files/styles/banner_image/public/2023-06/Colombo%20centre%20gym%20weights.jpg?itok=Fh89o5ZM"
         ));
 
         programs.add(new FitnessProgram(
@@ -203,7 +203,7 @@ public class ProgramSeeder {
                 Arrays.asList(3, 2, 2, 2, 2),
                 Arrays.asList(30, 30, 30, 30, 30),
                 "Home workout",
-                "3-4 times a week",
+                "2-3 times a week",
                 "Beginner",
                 "https://www.verywellfit.com/thmb/izD9uqNOkcgMFXK-6HTbdU67-KY=/3000x2000/filters:fill(auto,1)/yoga-for-beginners-2f0bff5a601d4348b7b3942a469b0e93.jpg"
         ));
@@ -226,7 +226,7 @@ public class ProgramSeeder {
                 "Gym workout",
                 "4-5 times a week",
                 "Intermediate",
-                "https://www.verywellfit.com/thmb/tqZmYZMLcftfYFZEBj7AG7uhZf8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/CardioWorkout-5b8f5d8d46e0fb0037e3e774.jpg"
+                "https://i0.wp.com/goldsgym.in/wp-content/uploads/2023/12/compress-strong-man-training-gym-min-scaled.jpg?fit=2560%2C1707&ssl=1"
         ));
 
         programs.add(new FitnessProgram(
@@ -287,7 +287,7 @@ public class ProgramSeeder {
                 Arrays.asList(4, 4, 4, 4, 4),
                 Arrays.asList(30, 20, 30, 60, 30),
                 "Home workout",
-                "3-4 times a week",
+                "2-3 times a week",
                 "Intermediate",
                 "https://cdn.pixabay.com/photo/2015/06/24/16/36/fitness-820317_960_720.jpg"
         ));
@@ -308,7 +308,7 @@ public class ProgramSeeder {
                 Arrays.asList(3, 3, 3, 4, 4),
                 Arrays.asList(10, 12, 10, 15, 15),
                 "Gym workout",
-                "3-4 times a week",
+                "2-3 times a week",
                 "Intermediate",
                 "https://www.muscleandfitness.com/wp-content/uploads/2018/09/MANUP3.jpg?quality=86&strip=all"
         ));
@@ -349,7 +349,7 @@ public class ProgramSeeder {
                 Arrays.asList(4, 4, 4, 3, 4),
                 Arrays.asList(6, 6, 6, 8, 8),
                 "Gym workout",
-                "3-4 times a week",
+                "2-3 times a week",
                 "Intermediate",
                 "https://cdn.pixabay.com/photo/2016/11/30/18/16/barbell-1873425_960_720.jpg"
         ));
@@ -398,7 +398,7 @@ public class ProgramSeeder {
 
         programs.add(new FitnessProgram(
                 "15",
-                "Home Pilates for Core - 3 Times a Week",
+                "Home Pilates for Core - 4 Times a Week",
                 "Pilates exercises focusing on core strength and flexibility.",
                 Arrays.asList("The Hundred", "Roll-up", "Leg circles", "Plank", "Saw"),
                 Arrays.asList(
@@ -412,7 +412,7 @@ public class ProgramSeeder {
                 Arrays.asList(3, 3, 3, 3, 3),
                 Arrays.asList(30, 30, 30, 60, 30),
                 "Home workout",
-                "3-4 times a week",
+                "4-5 times a week",
                 "Beginner",
                 "https://cdn.pixabay.com/photo/2015/09/06/22/54/pilates-925821_960_720.jpg"
         ));
@@ -440,7 +440,7 @@ public class ProgramSeeder {
 
         programs.add(new FitnessProgram(
                 "17",
-                "Home Strength Endurance - 3 Times a Week",
+                "Home Strength Endurance - 4 Times a Week",
                 "Endurance-focused strength workout for home use.",
                 Arrays.asList("Push-up variations", "Squat pulses", "Lunge jumps", "Mountain climbers", "Plank holds"),
                 Arrays.asList(
@@ -454,7 +454,7 @@ public class ProgramSeeder {
                 Arrays.asList(3, 3, 3, 4, 4),
                 Arrays.asList(15, 30, 30, 30, 60),
                 "Home workout",
-                "3-4 times a week",
+                "4-5 times a week",
                 "Intermediate",
                 "https://cdn.pixabay.com/photo/2015/05/07/15/45/fitness-752709_960_720.jpg"
         ));
