@@ -52,7 +52,7 @@ public class TrackFragment extends Fragment implements OnMapReadyCallback {
     private Location lastLocation;
     private long startTime;
     private boolean isTracking = false;
-    private double userWeight = 70.0; // Default weight in kg
+    private double userWeight = 70.0;
 
     private TextView tvDuration, tvPace, tvCalories;
     private Spinner spinnerExerciseType;

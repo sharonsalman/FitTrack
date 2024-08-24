@@ -48,7 +48,7 @@ public class MainScreenFragment extends Fragment {
     private ImageView programImageView;
     private Button viewProgramDetailsButton;
     private TextView greetingTextView;
-    private TextView nextWorkoutTextView;  // Add this line
+    private TextView nextWorkoutTextView;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -67,7 +67,7 @@ public class MainScreenFragment extends Fragment {
         programImageView = view.findViewById(R.id.programImageView);
         viewProgramDetailsButton = view.findViewById(R.id.selectprogram);
         greetingTextView = view.findViewById(R.id.greetingTextView);
-        nextWorkoutTextView = view.findViewById(R.id.nextWorkoutTextView);  // Initialize the TextView
+        nextWorkoutTextView = view.findViewById(R.id.nextWorkoutTextView);
 
         // Fetch the next workout date from Firebase
         fetchNextWorkoutDate();
@@ -112,7 +112,7 @@ public class MainScreenFragment extends Fragment {
                             }
 
                             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                return false; // Let Glide handle setting the resource
+                                return false;
                             }
                         })
                         .into(programImageView);

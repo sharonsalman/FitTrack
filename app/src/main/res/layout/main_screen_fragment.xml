@@ -17,25 +17,12 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
-    <!-- Next Workout Date TextView -->
-    <TextView
-        android:id="@+id/nextWorkoutTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Next Workout: "
-        android:textSize="18sp"
-        android:textColor="@android:color/black"
-        android:layout_below="@id/greetingTextView"
-        android:layout_marginTop="8dp"
-        android:layout_centerHorizontal="true" />
-
-
     <!-- ImageView to display program's photo -->
     <ImageView
         android:id="@+id/programImageView"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_below="@id/nextWorkoutTextView"
+        android:layout_below="@id/greetingTextView"
         android:layout_marginTop="16dp"
         android:scaleType="centerCrop" />
 
@@ -61,6 +48,18 @@
         android:layout_marginTop="16dp"
         android:layout_centerHorizontal="true" />
 
+    <!-- Next Workout Date TextView -->
+    <TextView
+        android:id="@+id/nextWorkoutTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Next Workout: "
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:layout_below="@id/selectprogram"
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true" />
+
     <!-- Button to view program details -->
     <Button
         android:id="@+id/viewProgramDetailsButton"
@@ -68,7 +67,7 @@
         android:layout_height="wrap_content"
         android:text="View Program Details"
         android:visibility="gone"
-        android:layout_below="@id/selectprogram"
+        android:layout_below="@id/nextWorkoutTextView"
         android:layout_marginTop="16dp"
         android:layout_centerHorizontal="true" />
 
