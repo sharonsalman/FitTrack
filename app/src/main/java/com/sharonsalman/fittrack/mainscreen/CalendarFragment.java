@@ -239,19 +239,18 @@ public class CalendarFragment extends Fragment {
     }
 
     private int parseFrequency(String frequency) {
-        // Example parsing logic; adjust according to your frequency format
-        if (frequency.equals("1-2 days")) {
-            return (int) (Math.random() * 2) + 1;
+        switch (frequency) {
+            case "1-2 times a week":
+                return 1 + (int) (Math.random() * 2); // Randomly 1 or 2
+            case "2-3 times a week":
+                return 2 + (int) (Math.random() * 2); // Randomly 2 or 3
+            case "4-5 times a week":
+                return 4 + (int) (Math.random() * 2); // Randomly 4 or 5
+            default:
+                return 1; // Default if frequency is unknown
         }
-        if (frequency.equals("2-3 days")) {
-            return (int) (Math.random() * 2) + 2;
-        }
-        if (frequency.equals("4-5 days")) {
-            return (int) (Math.random() * 2) + 4;
-        }
-        // Add other frequency parsing logic if needed
-        return 1;
     }
+
 
     private List<LocalDate> generateRandomDatesForWeek(LocalDate startDate, int occurrences) {
         List<LocalDate> dates = new ArrayList<>();
@@ -264,10 +263,15 @@ public class CalendarFragment extends Fragment {
                 chosenDates.add(randomDate);
                 dates.add(randomDate);
             }
+            // Ensure we don't get stuck in an infinite loop
+            if (dates.size() >= occurrences) {
+                break;
+            }
         }
 
         return dates;
     }
+
 
     private void displayEventsForDate(LocalDate date) {
         String dateStr = date.toString();

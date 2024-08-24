@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
@@ -27,19 +28,25 @@ public class current_weight_fragment extends Fragment {
         binding = FragmentCurrentWeightBinding.inflate(inflater, container, false);
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
-        // Set up the Spinner for current weight
-        Spinner currentWeightSpinner = binding.currentWeightSpinner;
-        ArrayAdapter<CharSequence> currentWeightAdapter = ArrayAdapter.createFromResource(requireContext(),
-                R.array.weight_options, android.R.layout.simple_spinner_item);
-        currentWeightAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        currentWeightSpinner.setAdapter(currentWeightAdapter);
+        // Initialize the EditText for current weight
+        EditText currentWeightEditText = binding.currentWeightEditText;
 
         // Handle button click
         binding.nextButton.setOnClickListener(v -> {
-            String selectedCurrentWeight = (String) currentWeightSpinner.getSelectedItem();
-            sharedViewModel.setCurrentWeight(Float.parseFloat(selectedCurrentWeight));
-            Navigation.findNavController(v).navigate(R.id.action_currentweightFragment_to_targetweightFragment);
+            String currentWeightString = currentWeightEditText.getText().toString();
+            if (!currentWeightString.isEmpty()) {
+                try {
+                    float currentWeight = Float.parseFloat(currentWeightString);
+                    sharedViewModel.setCurrentWeight(currentWeight);
+                    Navigation.findNavController(v).navigate(R.id.action_currentweightFragment_to_targetweightFragment);
+                } catch (NumberFormatException e) {
+                    currentWeightEditText.setError("Invalid weight format");
+                }
+            } else {
+                currentWeightEditText.setError("Weight cannot be empty");
+            }
         });
+
 
         binding.prevButton.setOnClickListener(v -> {
             Navigation.findNavController(v).navigate(R.id.action_currentweightFragment_to_goalFragment);

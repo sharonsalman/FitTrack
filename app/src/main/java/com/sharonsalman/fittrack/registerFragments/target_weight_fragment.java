@@ -5,8 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
+import android.widget.EditText;
+import android.widget.Button;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,7 +17,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.sharonsalman.fittrack.R;
 import com.sharonsalman.fittrack.SharedViewModel;
 import com.sharonsalman.fittrack.databinding.FragmentTargetWeightBinding;
-import android.content.Intent;
 
 public class target_weight_fragment extends Fragment {
     private FragmentTargetWeightBinding binding;
@@ -31,30 +30,36 @@ public class target_weight_fragment extends Fragment {
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         mAuth = FirebaseAuth.getInstance();
 
-        Spinner targetWeightSpinner = binding.targetWeightSpinner;
-        ArrayAdapter<CharSequence> targetWeightAdapter = ArrayAdapter.createFromResource(requireContext(),
-                R.array.weight_options, android.R.layout.simple_spinner_item);
-        targetWeightAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        targetWeightSpinner.setAdapter(targetWeightAdapter);
+        // Initialize the EditText for target weight
+        EditText targetWeightEditText = binding.currentWeightEditText; // Ensure the ID is correct
 
         // Handle button click
         binding.nextButton.setOnClickListener(v -> {
-            String selectedTargetWeight = (String) targetWeightSpinner.getSelectedItem();
-            sharedViewModel.setTargetWeight(Float.parseFloat(selectedTargetWeight));
+            String targetWeightString = targetWeightEditText.getText().toString();
+            if (!targetWeightString.isEmpty()) {
+                try {
+                    float targetWeight = Float.parseFloat(targetWeightString);
+                    sharedViewModel.setTargetWeight(targetWeight);
 
-            String email = sharedViewModel.getEmail().getValue();
-            String password = sharedViewModel.getPassword().getValue();
-            Log.d("Registration", "Retrieved email from SharedViewModel: " + email);
+                    String email = sharedViewModel.getEmail().getValue();
+                    String password = sharedViewModel.getPassword().getValue();
+                    Log.d("Registration", "Retrieved email from SharedViewModel: " + email);
 
-            if (email == null || email.isEmpty() || password == null || password.isEmpty()) {
-                Toast.makeText(requireContext(), "Email or password is missing", Toast.LENGTH_SHORT).show();
-                return;
+                    if (email == null || email.isEmpty() || password == null || password.isEmpty()) {
+                        Toast.makeText(requireContext(), "Email or password is missing", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    Log.d("Registration", "Registering with email: " + email);
+
+                    // Proceed directly to registration
+                    registerUser(email, password);
+                } catch (NumberFormatException e) {
+                    targetWeightEditText.setError("Invalid weight format");
+                }
+            } else {
+                targetWeightEditText.setError("Weight cannot be empty");
             }
-
-            Log.d("Registration", "Registering with email: " + email);
-
-            // Proceed directly to registration
-            registerUser(email, password);
         });
 
         binding.prevButton.setOnClickListener(v -> {
@@ -63,46 +68,47 @@ public class target_weight_fragment extends Fragment {
 
         return binding.getRoot();
     }
-private String sanitizeEmail(String email) {
-    return email.replace(".", ",");
-}
-    private void registerUser(String email, String password) {
-    String sanitizedEmail = sanitizeEmail(email);
-    Log.d("Registration", "Starting user registration");
-    mAuth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    Log.d("Registration", "Firebase authentication successful");
-                    sharedViewModel.saveDataToFirebase(new SharedViewModel.OnSaveCompleteListener() {
-                        @Override
-                        public void onSaveComplete(boolean saveSuccess, String saveMessage) {
-                            Log.d("Registration", "Save data complete. Success: " + saveSuccess + ", Message: " + saveMessage);
-                            requireActivity().runOnUiThread(() -> {
-                                if (saveSuccess) {
-                                    Log.d("Registration", "Attempting to show success toast and navigate");
-                                    Toast.makeText(requireContext(), "Registration complete!", Toast.LENGTH_SHORT).show();
-                                    try {
-                                        Navigation.findNavController(binding.getRoot()).navigate(R.id.action_targetweightFragment_to_main_screen_fragment);
-                                        Log.d("Registration", "Navigation action called");
-                                    } catch (Exception e) {
-                                        Log.e("Registration", "Navigation failed", e);
-                                    }
-                                } else {
-                                    Log.e("Registration", "Failed to save data: " + saveMessage);
-                                    Toast.makeText(requireContext(), "Error saving data: " + saveMessage, Toast.LENGTH_LONG).show();
-                                }
-                            });
-                        }
-                    });
-                } else {
-                    Log.e("Registration", "Firebase authentication failed", task.getException());
-                    requireActivity().runOnUiThread(() -> {
-                        Toast.makeText(requireContext(), "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                    });
-                }
-            });
-}
 
+    private String sanitizeEmail(String email) {
+        return email.replace(".", ",");
+    }
+
+    private void registerUser(String email, String password) {
+        String sanitizedEmail = sanitizeEmail(email);
+        Log.d("Registration", "Starting user registration");
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("Registration", "Firebase authentication successful");
+                        sharedViewModel.saveDataToFirebase(new SharedViewModel.OnSaveCompleteListener() {
+                            @Override
+                            public void onSaveComplete(boolean saveSuccess, String saveMessage) {
+                                Log.d("Registration", "Save data complete. Success: " + saveSuccess + ", Message: " + saveMessage);
+                                requireActivity().runOnUiThread(() -> {
+                                    if (saveSuccess) {
+                                        Log.d("Registration", "Attempting to show success toast and navigate");
+                                        Toast.makeText(requireContext(), "Registration complete!", Toast.LENGTH_SHORT).show();
+                                        try {
+                                            Navigation.findNavController(binding.getRoot()).navigate(R.id.action_targetweightFragment_to_main_screen_fragment);
+                                            Log.d("Registration", "Navigation action called");
+                                        } catch (Exception e) {
+                                            Log.e("Registration", "Navigation failed", e);
+                                        }
+                                    } else {
+                                        Log.e("Registration", "Failed to save data: " + saveMessage);
+                                        Toast.makeText(requireContext(), "Error saving data: " + saveMessage, Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        Log.e("Registration", "Firebase authentication failed", task.getException());
+                        requireActivity().runOnUiThread(() -> {
+                            Toast.makeText(requireContext(), "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                        });
+                    }
+                });
+    }
 
     @Override
     public void onDestroyView() {

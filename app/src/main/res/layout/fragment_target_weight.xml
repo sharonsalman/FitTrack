@@ -21,12 +21,12 @@
         android:text="Select Target Weight"
         android:textSize="18sp" />
 
-    <Spinner
-        android:id="@+id/targetWeightSpinner"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/currentWeightEditText"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="15dp"
-        android:paddingEnd="15dp" />
+        android:inputType="numberDecimal"
+        android:hint="Enter target weight" />
 
     <Button
         android:id="@+id/nextButton"
