@@ -21,6 +21,9 @@ import com.sharonsalman.fittrack.R;
 import com.sharonsalman.fittrack.UserFitnessData;
 import com.sharonsalman.fittrack.UserViewModel;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class SettingsFragment extends Fragment {
     private static final String TAG = "SettingsFragment";
     private UserViewModel userViewModel;
@@ -70,6 +73,8 @@ public class SettingsFragment extends Fragment {
             Log.d(TAG, "loadUserData: Observer triggered");
             if (userFitnessData != null) {
                 Log.d(TAG, "loadUserData: User fitness data loaded: " + userFitnessData.toString());
+
+                // Setting spinner selections based on the user data from Firebase
                 setSpinnerSelection(fitnessLevelSpinner, R.array.fitness_level, userFitnessData.getFitnessLevel());
                 setSpinnerSelection(goalSpinner, R.array.goal, userFitnessData.getGoal());
                 targetWeightEdit.setText(String.valueOf(userFitnessData.getTargetWeight()));
@@ -80,6 +85,25 @@ public class SettingsFragment extends Fragment {
             }
         });
     }
+
+    private void setSpinnerSelection(Spinner spinner, int arrayResourceId, String value) {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                arrayResourceId, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        if (value != null) {
+            int spinnerPosition = adapter.getPosition(value);
+
+            // Check if the value exists in the spinner's adapter
+            if (spinnerPosition >= 0) {
+                spinner.setSelection(spinnerPosition);
+            } else {
+                Log.e(TAG, "setSpinnerSelection: Value not found in spinner adapter - " + value);
+            }
+        }
+    }
+
 
     private void saveUserData() {
         Log.d(TAG, "saveUserData: Saving user data");
@@ -108,26 +132,22 @@ public class SettingsFragment extends Fragment {
                     }
                 }
 
-                UserFitnessData updatedUserFitnessData = new UserFitnessData(fitnessLevel, goal, workoutFrequency, workoutLocation, targetWeight);
-                Log.d(TAG, "saveUserData: Updating user fitness data: " + updatedUserFitnessData);
-                userViewModel.updateUserFitnessData(updatedUserFitnessData);
+                // Create a map of fields to update
+                Map<String, Object> updates = new HashMap<>();
+                updates.put("fitnessLevel", fitnessLevel);
+                updates.put("goals", goal);
+                updates.put("workoutFrequency", workoutFrequency);
+                updates.put("workoutLocation", workoutLocation);
+                updates.put("targetWeight", targetWeight);
+
+                // Perform the update
+                userViewModel.updateUserFitnessData(updates);
+
             } else {
                 Log.e(TAG, "saveUserData: No user fitness data available");
             }
         } else {
             Log.e(TAG, "No authenticated user found");
-        }
-    }
-
-
-    private void setSpinnerSelection(Spinner spinner, int arrayResourceId, String value) {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                arrayResourceId, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        if (value != null) {
-            int spinnerPosition = adapter.getPosition(value);
-            spinner.setSelection(spinnerPosition);
         }
     }
 }

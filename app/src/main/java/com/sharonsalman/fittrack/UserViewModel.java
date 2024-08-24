@@ -16,6 +16,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Map;
+
 public class UserViewModel extends ViewModel {
     private static final String TAG = "UserViewModel";
     private final MutableLiveData<UserFitnessData> userFitnessData = new MutableLiveData<>();
@@ -44,7 +46,7 @@ public class UserViewModel extends ViewModel {
                         String workoutFrequency = getStringFromSnapshot(dataSnapshot.child("workoutFrequency"));
                         String fitnessLevel = getStringFromSnapshot(dataSnapshot.child("fitnessLevel"));
                         String workoutLocation = getStringFromSnapshot(dataSnapshot.child("workoutLocation"));
-                        String goal = getStringFromSnapshot(dataSnapshot.child("goal"));
+                        String goal = getStringFromSnapshot(dataSnapshot.child("goals"));
 
                         // Handle conversion for Long and Double
                         float currentWeight = getFloatFromSnapshot(dataSnapshot.child("currentWeight"));
@@ -101,14 +103,17 @@ public class UserViewModel extends ViewModel {
         }
     }
 
-    public void updateUserFitnessData(UserFitnessData updatedFitnessData) {
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+    public void updateUserFitnessData(Map<String, Object> updates) {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = auth.getCurrentUser();
         if (firebaseUser != null) {
-            String uid = firebaseUser.getUid(); // Use UID for updating data
-            reference.child(uid).setValue(updatedFitnessData)
-                    .addOnSuccessListener(aVoid -> Log.d(TAG, "User fitness data updated successfully"))
-                    .addOnFailureListener(e -> Log.e(TAG, "Error updating user fitness data", e));
+            String userId = firebaseUser.getUid();
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
+            userRef.updateChildren(updates)
+                    .addOnSuccessListener(aVoid -> Log.d(TAG, "User fitness data successfully updated"))
+                    .addOnFailureListener(e -> Log.e(TAG, "Failed to update user fitness data", e));
         }
     }
+
 
 }
