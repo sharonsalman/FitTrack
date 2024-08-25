@@ -23,6 +23,7 @@ public class name_fragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentNameBinding.inflate(inflater, container, false);
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        sharedViewModel.setName("");
 
         binding.setSharedViewModel(sharedViewModel);
         binding.setLifecycleOwner(getViewLifecycleOwner());
