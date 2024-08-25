@@ -17,7 +17,7 @@
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/yourusername/fittrack.git
+   git clone [https://github.com/yourusername/fittrack.git](https://github.com/sharonsalman/FitTrack)
    ```
 
 2. **Navigate to the Project Directory**:
