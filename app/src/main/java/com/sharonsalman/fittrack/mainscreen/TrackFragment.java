@@ -259,23 +259,28 @@ public class TrackFragment extends Fragment implements OnMapReadyCallback {
             return;
         }
 
-        LatLng testLocation = new LatLng(-34, 151); // Sydney, Australia
-        mMap.addMarker(new MarkerOptions().position(testLocation).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(testLocation, 10));
-
-        Log.d("TrackFragment", "Added marker at: " + testLocation.latitude + ", " + testLocation.longitude);
-        Log.d("TrackFragment", "Camera moved to: " + testLocation.latitude + ", " + testLocation.longitude);
-
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             Log.d("TrackFragment", "Location permission granted");
             mMap.setMyLocationEnabled(true);
+
+            // Get the user's current location
+            fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+                if (location != null) {
+                    LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                    addMarker(userLocation);  // Add a marker at the user's current location
+                } else {
+                    Log.e("TrackFragment", "Current location is null");
+                    Toast.makeText(getContext(), "Unable to get current location", Toast.LENGTH_SHORT).show();
+                }
+            });
         } else {
             Log.d("TrackFragment", "Location permission not granted");
             // Request permission if not granted
             checkLocationPermission();
         }
     }
+
 
     private void addMarker(LatLng latLng) {
         mMap.clear(); // Clear previous markers
